@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    String @id @default(uuid())
+  name  String
+  email String @unique
+
+  password  UserPassword?
+  products  Product[]
+  markets   Market[]
+  purchases Purchase[]
+
+  @@map("user")
+}
+
+model UserPassword {
+  id       String @id @default(uuid())
+  password String
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_password")
+}
+
+model Product {
+  id          String  @id @default(uuid())
+  name        String
+  brand       String
+  listDefault Boolean @map("list_default")
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  items ProductItem[]
+
+  @@map("product")
+}
+
+model Market {
+  id   String @id @default(uuid())
+  name String
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  purchases Purchase[]
+
+  @@map("market")
+}
+
+model Purchase {
+  id   String  @id @default(uuid())
+  name String?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  marketId String
+  market   Market @relation(fields: [marketId], references: [id])
+
+  items ProductItem[]
+
+  @@map("purchase")
+}
+
+model ProductItem {
+  productId  String
+  purchaseId String
+
+  price  Float
+  amount BigInt
+
+  product  Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  purchase Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+
+  @@id([productId, purchaseId])
+  @@map("product_item")
+}

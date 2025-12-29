@@ -36,3 +36,10 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+/generated/prisma
+
+# IDE - VSCode
+.vscode/
+.vscode/settings.json
+.vscode/launch.json

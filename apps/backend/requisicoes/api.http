@@ -1,0 +1,73 @@
+### ---------------------- AUTH ----------------------
+# @name register
+POST http://localhost:4000/auth/register
+Content-Type: application/json
+
+{
+  "name": "Usuario Padrao Formacao",
+  "email": "usuarioformacao@formacao.dev",
+  "password": "#Senha123"
+}
+
+###
+# @name login
+@token = {{login.response.body.token}}
+@userId = {{login.response.body.userId}}
+
+POST http://localhost:4000/auth/login
+Content-Type: application/json
+
+{
+  "email": "usuario@formacao.dev",
+  "password": "#Senha123"
+}
+
+
+### ------------------ MARKET ------------------
+
+### ------------------ CREATE MARKET ------------------
+
+# @name create
+@uuidMarket = {{create.response.body.id}}
+
+POST http://localhost:4000/market
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Bistek",
+  "userId": "{{userId}}"
+}
+
+### ------------------ GET MARKETS -----------------------
+GET http://localhost:4000/market
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+### ------------------ GET MARKET BY ID ------------------
+GET http://localhost:4000/market/{{uuidMarket}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+### ------------------ UPDATE MARKET ------------------
+PATCH http://localhost:4000/market/{{uuidMarket}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Bistek Atualizado"
+}
+
+###
+
+### ------------------ DELETE MARKET ------------------
+DELETE http://localhost:4000/market/{{uuidMarket}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
