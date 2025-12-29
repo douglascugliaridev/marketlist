@@ -9,7 +9,7 @@ describe("Market Entity - Validação de Criação", () => {
             userId: "7f3b7c8e-9c6d-4a4f-9b91-5a6c2f1e3d84"
         });
         expect(market.getId()).toBe("c2a6f8b3-4c0d-4e9b-9f2e-7a1d5b6c8e90");
-        expect(market.getName()).toBe("Supermercado Exemplo");
+        expect(market.getName()).toBe("supermercado exemplo");
         expect(market.getUserId()).toBe("7f3b7c8e-9c6d-4a4f-9b91-5a6c2f1e3d84");
     });
 
@@ -80,7 +80,7 @@ describe("Market Entity - Validação de Criação", () => {
                 name: "Supermercado Exemplo",
                 userId: "invalid-uuid"
             });
-        }).toThrow("Formato de UUID do usuário inválido");
+        }).toThrow("ID do usuário deve ser um UUID válido");
     });
 
     it("Criação com userId null", () => {
@@ -113,7 +113,7 @@ describe("Market Entity - Atualização de Nome", () => {
         });
 
         const updatedMarket = market.updateName("Hipermercado Exemplo");
-        expect(updatedMarket.getName()).toBe("Hipermercado Exemplo");
+        expect(updatedMarket.getName()).toBe("hipermercado exemplo");
         expect(updatedMarket.getId()).toBe("c2a6f8b3-4c0d-4e9b-9f2e-7a1d5b6c8e90");
         expect(updatedMarket.getUserId()).toBe("7f3b7c8e-9c6d-4a4f-9b91-5a6c2f1e3d84");
     });
@@ -201,8 +201,8 @@ describe("Market Entity - Imutabilidade", () => {
 
         const updatedMarket = originalMarket.updateName("Supermercado Atualizado");
 
-        expect(originalMarket.getName()).toBe("Supermercado Original");
-        expect(updatedMarket.getName()).toBe("Supermercado Atualizado");
+        expect(originalMarket.getName()).toBe("supermercado original");
+        expect(updatedMarket.getName()).toBe("supermercado atualizado");
         expect(originalMarket.getId()).toBe(updatedMarket.getId());
         expect(originalMarket.getUserId()).toBe(updatedMarket.getUserId());
         expect(originalMarket).not.toBe(updatedMarket);
@@ -218,9 +218,9 @@ describe("Market Entity - Imutabilidade", () => {
         const market2 = market1.updateName("Nome 2");
         const market3 = market2.updateName("Nome 3");
 
-        expect(market1.getName()).toBe("Nome 1");
-        expect(market2.getName()).toBe("Nome 2");
-        expect(market3.getName()).toBe("Nome 3");
+        expect(market1.getName()).toBe("nome 1");
+        expect(market2.getName()).toBe("nome 2");
+        expect(market3.getName()).toBe("nome 3");
         expect(market1).not.toBe(market2);
         expect(market2).not.toBe(market3);
         expect(market1).not.toBe(market3);
@@ -277,7 +277,7 @@ describe("Market Entity - Edge Cases", () => {
             userId: "7f3b7c8e-9c6d-4a4f-9b91-5a6c2f1e3d84"
         });
 
-        expect(market.getName()).toBe("Supermercado Exemplo");
+        expect(market.getName()).toBe("supermercado exemplo");
         expect(market.getNameForComparison()).toBe("supermercado exemplo");
     });
 
@@ -288,7 +288,7 @@ describe("Market Entity - Edge Cases", () => {
             userId: "7f3b7c8e-9c6d-4a4f-9b91-5a6c2f1e3d84"
         });
 
-        expect(market.getName()).toBe("Supermercado & Exemplo's");
+        expect(market.getName()).toBe("supermercado & exemplo's");
         expect(market.getNameForComparison()).toBe("supermercado & exemplo's");
     });
 
@@ -299,7 +299,7 @@ describe("Market Entity - Edge Cases", () => {
             userId: "7f3b7c8e-9c6d-4a4f-9b91-5a6c2f1e3d84"
         });
 
-        expect(market.getName()).toBe("Supermercado São João & Árvore");
+        expect(market.getName()).toBe("supermercado são joão & árvore");
         expect(market.getNameForComparison()).toBe("supermercado são joão & árvore");
     });
 
@@ -310,7 +310,7 @@ describe("Market Entity - Edge Cases", () => {
             userId: "7f3b7c8e-9c6d-4a4f-9b91-5a6c2f1e3d84"
         });
 
-        expect(market.getName()).toBe("Supermercado    Exemplo    Teste");
+        expect(market.getName()).toBe("supermercado    exemplo    teste");
         expect(market.getNameForComparison()).toBe("supermercado    exemplo    teste");
     });
 
@@ -332,7 +332,7 @@ describe("Market Entity - Edge Cases", () => {
             userId: "7f3b7c8e-9c6d-4a4f-9b91-5a6c2f1e3d84"
         });
 
-        expect(market.getName()).toBe("Supermercado\tExemplo\nTeste");
+        expect(market.getName()).toBe("supermercado\texemplo\nteste");
         expect(market.getNameForComparison()).toBe("supermercado\texemplo\nteste");
     });
 
@@ -346,7 +346,7 @@ describe("Market Entity - Limites Exatos", () => {
             userId: "7f3b7c8e-9c6d-4a4f-9b91-5a6c2f1e3d84"
         });
 
-        expect(market.getName()).toBe("AB");
+        expect(market.getName()).toBe("ab");
         expect(market.getNameForComparison()).toBe("ab");
     });
 
@@ -358,7 +358,7 @@ describe("Market Entity - Limites Exatos", () => {
             userId: "7f3b7c8e-9c6d-4a4f-9b91-5a6c2f1e3d84"
         });
 
-        expect(market.getName()).toBe(name100);
+        expect(market.getName()).toBe(name100.toLowerCase());
         expect(market.getNameForComparison()).toBe(name100.toLowerCase());
     });
 

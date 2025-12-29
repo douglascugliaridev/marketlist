@@ -9,7 +9,13 @@ describe("Product Entity", () => {
         const productId = ProductId.create("3f2c8b6e-9a4f-4c8a-bb41-2f6f6a1e9d72");
         const productName = ProductName.create("Arroz");
         const userId = UserId.create("7f3b7c8e-9c6d-4a4f-9b91-5a6c2f1e3d84");
-        const product = new Product(productId, productName, "Marca A", false, userId);
+        const product = Product.create({
+            id: productId.getValue(),
+            name: productName.getValue(),
+            brand: "Marca A",
+            listDefault: false,
+            userId: userId.getValue()
+        });
 
         expect(product.getId()).toBe("3f2c8b6e-9a4f-4c8a-bb41-2f6f6a1e9d72");
         expect(product.getName()).toBe("Arroz");
@@ -22,7 +28,13 @@ describe("Product Entity", () => {
         const productId = ProductId.create("3f2c8b6e-9a4f-4c8a-bb41-2f6f6a1e9d72");
         const productName = ProductName.create("Arroz");
         const userId = UserId.create("7f3b7c8e-9c6d-4a4f-9b91-5a6c2f1e3d84");
-        const product = new Product(productId, productName, "Marca A", false, userId);
+        const product = Product.create({
+            id: productId.getValue(),
+            name: productName.getValue(),
+            brand: "Marca A",
+            listDefault: false,
+            userId: userId.getValue()
+        });
 
         expect(product.getId()).toBeDefined();
         expect(product.getName()).toBeDefined();
@@ -35,7 +47,13 @@ describe("Product Entity", () => {
         const productId = ProductId.create("3f2c8b6e-9a4f-4c8a-bb41-2f6f6a1e9d72");
         const productName = ProductName.create("Feijão");
         const userId = UserId.create("7f3b7c8e-9c6d-4a4f-9b91-5a6c2f1e3d84");
-        const product = new Product(productId, productName, "Marca B", true, userId);
+        const product = Product.create({
+            id: productId.getValue(),
+            name: productName.getValue(),
+            brand: "Marca B",
+            listDefault: true,
+            userId: userId.getValue()
+        });
 
         expect(product.getId()).toBe("3f2c8b6e-9a4f-4c8a-bb41-2f6f6a1e9d72");
         expect(product.getName()).toBe("Feijão");
@@ -50,7 +68,13 @@ describe("Product Entity", () => {
         const userId = UserId.create("7f3b7c8e-9c6d-4a4f-9b91-5a6c2f1e3d84");
 
         expect(() => {
-            new Product(productId, productName, ProductBrand.create("").getValue(), false, userId);
+            Product.create({
+                id: productId.getValue(),
+                name: productName.getValue(),
+                brand: ProductBrand.create("").getValue(),
+                listDefault: false,
+                userId: userId.getValue()
+            });
         }).toThrow("Marca do produto é obrigatória");
     });
 
@@ -58,7 +82,13 @@ describe("Product Entity", () => {
         const productId = ProductId.create("3f2c8b6e-9a4f-4c8a-bb41-2f6f6a1e9d72");
         const productName = ProductName.create("Arroz");
         const userId = UserId.create("7f3b7c8e-9c6d-4a4f-9b91-5a6c2f1e3d84");
-        const product = new Product(productId, productName, ProductBrand.create("  Marca A  ").getValue(), false, userId);
+        const product = Product.create({
+            id: productId.getValue(),
+            name: productName.getValue(),
+            brand: ProductBrand.create("  Marca A  ").getValue(),
+            listDefault: false,
+            userId: userId.getValue()
+        });
 
         expect(product.getBrand()).toBe("Marca A");
     });
@@ -67,7 +97,13 @@ describe("Product Entity", () => {
         const productId = ProductId.create("3f2c8b6e-9a4f-4c8a-bb41-2f6f6a1e9d72");
         const productName = ProductName.create("  Arroz  ");
         const userId = UserId.create("7f3b7c8e-9c6d-4a4f-9b91-5a6c2f1e3d84");
-        const product = new Product(productId, productName, "Marca A", false, userId);
+        const product = Product.create({
+            id: productId.getValue(),
+            name: productName.getValue(),
+            brand: "Marca A",
+            listDefault: false,
+            userId: userId.getValue()
+        });
 
         expect(product.getName()).toBe("Arroz");
     });
@@ -77,7 +113,13 @@ describe("Product Entity", () => {
         const productName = ProductName.create("Arroz");
         const productBrand = ProductBrand.create("Marca A");
         const userId = UserId.create("7f3b7c8e-9c6d-4a4f-9b91-5a6c2f1e3d84");
-        const product = new Product(productId, productName, productBrand.getValue(), false, userId);
+        const product = Product.create({
+            id: productId.getValue(),
+            name: productName.getValue(),
+            brand: productBrand.getValue(),
+            listDefault: false,
+            userId: userId.getValue()
+        });
 
         expect(product.getBrand()).toBe("Marca A");
     });
@@ -89,7 +131,13 @@ describe("Product Entity - Value Objects", () => {
         const userId = UserId.create("7f3b7c8e-9c6d-4a4f-9b91-5a6c2f1e3d84");
 
         expect(() => {
-            new Product(ProductId.create("invalid-uuid"), productName, "Marca A", false, userId);
+            Product.create({
+                id: ProductId.create("invalid-uuid").getValue(),
+                name: productName.getValue(),
+                brand: "Marca A",
+                listDefault: false,
+                userId: userId.getValue()
+            });
         }).toThrow("ID do produto inválido");
     });
 
@@ -98,8 +146,14 @@ describe("Product Entity - Value Objects", () => {
         const productName = ProductName.create("Arroz");
 
         expect(() => {
-            new Product(productId, productName, "Marca A", false, UserId.create("invalid-uuid"));
-        }).toThrow("Formato de UUID do usuário inválido");
+            Product.create({
+                id: productId.getValue(),
+                name: productName.getValue(),
+                brand: "Marca A",
+                listDefault: false,
+                userId: UserId.create("invalid-uuid").getValue()
+            });
+        }).toThrow("ID do usuário deve ser um UUID válido");
     });
 
     it("não deve criar um produto com UUID vázio", () => {
