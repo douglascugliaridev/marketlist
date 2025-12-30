@@ -75,8 +75,9 @@ model ProductItem {
   productId  String
   purchaseId String
 
-  price  Float
-  amount BigInt
+  price         Float
+  previousPrice Float?
+  amount        BigInt
 
   product  Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   purchase Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)

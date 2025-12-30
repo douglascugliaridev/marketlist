@@ -10,6 +10,7 @@ export class ProductItem {
         private readonly product: Product,
         private readonly purchase: Purchase,
         private readonly price: Price,
+        private readonly previousPrice: Price,
         private readonly amount: Amount,
         private readonly createdAt: Date,
         private readonly updatedAt: Date
@@ -43,9 +44,20 @@ export class ProductItem {
         return this.updatedAt;
     }
 
+
     // Calcula o preço total do item (preço unitário * quantidade)
     getTotalPrice(): number {
         return this.price.getValue() * this.amount.getValue();
+    }
+
+    // Obtém o preço anterior do item
+    getPreviousPrice(): Price {
+        return this.previousPrice;
+    }
+
+    // Verifica se o preço foi alterado em relação ao preço anterior
+    hasPriceChanged(): boolean {
+        return this.price.getValue() !== this.previousPrice.getValue();
     }
 
     // Verificar se este item de produto é igual a outro
@@ -58,6 +70,7 @@ export class ProductItem {
         product: Product;
         purchase: Purchase;
         price: number;
+        previousPrice: number;
         amount: number;
         createdAt?: Date;
         updatedAt?: Date;
@@ -68,6 +81,7 @@ export class ProductItem {
             props.product,
             props.purchase,
             new Price(props.price),
+            new Price(props.previousPrice),
             new Amount(props.amount),
             props.createdAt || now,
             props.updatedAt || now

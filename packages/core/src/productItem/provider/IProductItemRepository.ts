@@ -10,4 +10,5 @@ export interface IProductItemRepository {
     delete(id: string): Promise<ProductItem | null>;
     deleteByPurchaseId(purchaseId: string): Promise<void>;
     update(id: string, price?: number, amount?: number): Promise<void>;
+    findLastPriceByProduct(productId: string): Promise<number | null>;
 }

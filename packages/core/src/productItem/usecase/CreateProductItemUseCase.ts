@@ -10,6 +10,7 @@ interface CreateProductItemProps {
     productId: string;
     purchaseId: string;
     price: number;
+    previousPrice: number;
     amount: number;
     product: Product;
     purchase: Purchase;
@@ -37,6 +38,7 @@ export class CreateProductItemUseCase {
             product: props.product,
             purchase: props.purchase,
             price: props.price,
+            previousPrice: props.previousPrice,
             amount: props.amount
         });
 
