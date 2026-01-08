@@ -1,5 +1,7 @@
 ### ---------------------- AUTH ----------------------
 # @name register
+
+@userId = {{register.response.body.userId}}
 POST http://localhost:4000/auth/register
 Content-Type: application/json
 
@@ -28,7 +30,7 @@ Content-Type: application/json
 ### ------------------ CREATE MARKET ------------------
 
 # @name create
-@uuidMarket = {{create.response.body.id}}
+@uuidMarket = b4a64bcd-9a1f-4ddb-bdef-2d153be7c3a2
 
 POST http://localhost:4000/market
 Content-Type: application/json
@@ -71,3 +73,79 @@ Authorization: Bearer {{token}}
 
 ###
 
+
+
+### ---------------------- PRODUCT --------------------------
+
+### ------------------ CREATE PRODUCT ------------------
+# @name create
+@uuidProduct = 1dbc045a-712e-4489-95c0-2a77b3f7a202
+@userId = 8460086d-b156-451c-9734-486fbdef69cb
+
+POST http://localhost:4000/product
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Feijão",
+  "brand": "Feijão",
+  "price": 10.00,
+  "userId": "{{userId}}",
+  "marketId": "{{uuidMarket}}"
+}
+
+###
+
+### ------------------ GET PRODUCT BY ID ------------------
+GET http://localhost:4000/product/1dbc045a-712e-4489-95c0-2a77b3f7a202
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+### ----------------- GET PRODUCTS BY NAME ------------------
+GET http://localhost:4000/product/search?name=Feijão
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+### ----------------- GET PRODUCTS BY BRAND ------------------
+GET http://localhost:4000/product?brand=Feijão
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+### ----------------- GET PRODUCTS BY LIST DEFAULT ------------------
+GET http://localhost:4000/product/default?userId={{userId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+### ----------------- GET PRODUCTS BY USER ID ------------------
+GET http://localhost:4000/product?userId={{userId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+### ----------------- UPDATE PRODUCT ------------------
+PATCH http://localhost:4000/product/3862b247-3ff4-4597-a257-8529a65e0bbc
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "brand": "Ligeirinho"
+}
+
+### 
+
+### ----------------- DELETE PRODUCT ------------------
+
+DELETE http://localhost:4000/product/{{uuidProduct}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### 

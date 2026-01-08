@@ -1,16 +1,13 @@
-import { ValidationError } from "../../../shared/errors/ValidationError";
+import { PurchaseValidationService } from "../../service/PurchaseValidationService";
 
 export class PurchaseName {
     private constructor(private readonly value: string | null) { }
 
     static create(name: string | null | undefined): PurchaseName {
+        PurchaseValidationService.validatePurchaseNameFormat(name);
+
         if (name !== undefined && name !== null) {
             const trimmedName = name.trim();
-
-            if (trimmedName.length > 100) {
-                throw new ValidationError("Nome da compra não pode ter mais de 100 caracteres");
-            }
-
             return new PurchaseName(trimmedName.length > 0 ? trimmedName : null);
         }
 

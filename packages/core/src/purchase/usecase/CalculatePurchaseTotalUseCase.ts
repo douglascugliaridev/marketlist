@@ -1,5 +1,5 @@
 import { IPurchaseRepository } from "../provider/IPurchaseRepository";
-import { NotFoundError } from "../../shared/errors/NotFoundError";
+import { PurchaseValidationService } from "../service/PurchaseValidationService";
 
 interface CalculateTotalProps {
     purchaseId: string;
@@ -13,13 +13,11 @@ export class CalculatePurchaseTotalUseCase {
     async execute(props: CalculateTotalProps): Promise<{ total: number; itemsCount: number }> {
         const purchase = await this.purchaseRepository.findById(props.purchaseId);
 
-        if (!purchase) {
-            throw new NotFoundError("Compra não encontrada");
-        }
+        const validatedPurchase = PurchaseValidationService.validatePurchaseExists(purchase);
 
         return {
-            total: purchase.getTotal(),
-            itemsCount: purchase.getItemsCount()
+            total: validatedPurchase.getTotal(),
+            itemsCount: validatedPurchase.getItemsCount()
         };
     }
 }

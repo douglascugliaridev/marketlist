@@ -1,20 +1,12 @@
-import { ValidationError } from "../../../shared/errors/ValidationError";
+import { UserValidationService } from "../../service/UserValidationService";
 
 export class UserEmail {
     private constructor(private readonly value: string) { }
 
     static create(email: string): UserEmail {
-        if (!email || typeof email !== "string" || email.trim().length === 0) {
-            throw new ValidationError("Email do usuário é obrigatório");
-        }
+        UserValidationService.validateUserEmailFormat(email);
 
         const trimmedEmail = email.trim().toLowerCase();
-        const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
-
-        if (!isValid) {
-            throw new ValidationError("Formato de email do usuário inválido");
-        }
-
         return new UserEmail(trimmedEmail);
     }
 

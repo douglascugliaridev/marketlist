@@ -1,10 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { DomainErrorFilter } from './shared/domain-error.filter';
+import { CoreErrorFilter } from './shared/core-error.filter';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    app.useGlobalFilters(new DomainErrorFilter());
+    app.useGlobalFilters(new CoreErrorFilter());
     await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

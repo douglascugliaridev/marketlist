@@ -1,5 +1,5 @@
 import { IUserRepository } from "../provider/IUserRepository";
-import { NotFoundError } from "../../shared/errors/NotFoundError";
+import { UserValidationService } from "../service/UserValidationService";
 import { UserId } from "../model/value-objects/UserId";
 
 export type GetUserByIdOutput = {
@@ -18,14 +18,12 @@ export class GetUserByIdUseCase {
 
         const user = await this.userRepository.findById(id.getValue());
 
-        if (!user) {
-            throw new NotFoundError("Usuário não encontrado");
-        }
+        const validatedUser = UserValidationService.validateUserExists(user);
 
         return {
-            id: user.getId(),
-            name: user.getName(),
-            email: user.getEmail(),
+            id: validatedUser.getId(),
+            name: validatedUser.getName(),
+            email: validatedUser.getEmail(),
         };
     }
 }

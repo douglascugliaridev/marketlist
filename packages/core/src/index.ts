@@ -3,6 +3,7 @@ import { CreateMarketUseCase, DeleteMarketUseCase, FindMarketUseCase, UpdateMark
 import { Market } from "./market/model/market.entity";
 import { IMarketRepository } from "./market/provider/IMarketRepository";
 import { IUUIDProvider } from "./shared/IUUIDProvider";
+import { DomainError } from "./shared/DomainError";
 
 // User imports
 import { User } from "./users/model/user.entity";
@@ -11,6 +12,11 @@ import { IUserPasswordRepository } from "./users/provider/IUserPasswordRepositor
 import { IPasswordHasher } from "./users/provider/IPasswordHasher";
 import { CreateUserUseCase } from "./users/usecase/CreateUserUseCase";
 import { LoginUseCase } from "./users/usecase/LoginUseCase";
+
+// Product imports
+import { Product } from "./product/model/product.entity";
+import { IProductRepository } from "./product/provider/IProductRepository";
+import { CreateProductUseCase, UpdateProductUseCase, DeleteProductUseCase, FindProductUseCase, FindDefaultProductsUseCase } from "./product/usecase/index";
 
 // Purchase imports
 import { Purchase } from "./purchase/model/purchase.entity";
@@ -24,9 +30,6 @@ import { IProductItemRepository } from "./productItem/provider/IProductItemRepos
 import { CreateProductItemUseCase, UpdateProductItemUseCase, DeleteProductItemUseCase, FindProductItemsByPurchaseUseCase } from "./productItem/usecase/index";
 import { ProductItemId, Price, Amount } from "./productItem/model/value-objects/index";
 
-// Error imports
-import { DomainError } from "./shared/errors/DomainError";
-
 // Market exports
 export { CreateMarketUseCase, UpdateMarketUseCase, DeleteMarketUseCase, FindMarketUseCase };
 export { Market, IMarketRepository, IUUIDProvider };
@@ -34,6 +37,10 @@ export { Market, IMarketRepository, IUUIDProvider };
 // User exports
 export { CreateUserUseCase, LoginUseCase };
 export { User, IUserRepository, IUserPasswordRepository, IPasswordHasher };
+
+// Product exports
+export { Product, IProductRepository };
+export { CreateProductUseCase, UpdateProductUseCase, DeleteProductUseCase, FindProductUseCase, FindDefaultProductsUseCase };
 
 // Purchase exports
 export { Purchase, IPurchaseRepository };
@@ -45,5 +52,5 @@ export { ProductItem, IProductItemRepository };
 export { CreateProductItemUseCase, UpdateProductItemUseCase, DeleteProductItemUseCase, FindProductItemsByPurchaseUseCase };
 export { ProductItemId, Price, Amount };
 
-// Error exports
+// Shared exports
 export { DomainError };

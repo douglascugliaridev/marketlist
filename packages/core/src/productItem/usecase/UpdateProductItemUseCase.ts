@@ -1,5 +1,5 @@
 import { IProductItemRepository } from "../provider/IProductItemRepository";
-import { NotFoundError } from "../../shared/errors/NotFoundError";
+import { ProductItemValidationService } from "../service/ProductItemValidationService";
 
 interface UpdateProductItemProps {
     id: string;
@@ -15,9 +15,7 @@ export class UpdateProductItemUseCase {
     async execute(props: UpdateProductItemProps): Promise<void> {
         const existingItem = await this.productItemRepository.findById(props.id);
 
-        if (!existingItem) {
-            throw new NotFoundError("Item do produto não encontrado");
-        }
+        ProductItemValidationService.validateProductItemExists(existingItem);
 
         await this.productItemRepository.update(props.id, props.price, props.amount);
     }

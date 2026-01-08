@@ -1,24 +1,12 @@
-import { ValidationError } from "../../../shared/errors/ValidationError";
-
+import { ProductValidationService } from "../../service/ProductValidationService";
 
 export class ProductName {
     private constructor(private readonly value: string) { }
 
     static create(name: string): ProductName {
-        if (!name || name.trim().length === 0) {
-            throw new ValidationError("Nome do produto é obrigatório");
-        }
+        ProductValidationService.validateProductNameFormat(name);
 
         const trimmedName = name.trim();
-
-        if (trimmedName.length < 2) {
-            throw new ValidationError("Nome do produto deve ter pelo menos 2 caracteres");
-        }
-
-        if (trimmedName.length > 100) {
-            throw new ValidationError("Nome do produto deve ter no máximo 100 caracteres");
-        }
-
         return new ProductName(trimmedName);
     }
 

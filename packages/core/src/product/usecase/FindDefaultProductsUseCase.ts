@@ -1,5 +1,6 @@
 import { IProductRepository } from "../provider/IProductRepository";
 import { Product } from "../model/product.entity";
+import { ProductValidationService } from "../service/ProductValidationService";
 
 export class FindDefaultProductsUseCase {
     constructor(
@@ -7,6 +8,10 @@ export class FindDefaultProductsUseCase {
     ) { }
 
     async execute(userId: string): Promise<Product[]> {
-        return await this.productRepository.findByListDefault(userId);
+        ProductValidationService.validateUserIdFormat(userId);
+
+        const products = await this.productRepository.findByListDefault(userId);
+
+        return products;
     }
 }

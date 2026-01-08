@@ -46,4 +46,24 @@ export class Product {
             UserId.create(props.userId)
         );
     }
+
+    updateName(name: string): Product {
+        return new Product(
+            this.id,
+            ProductName.create(name),
+            this.brand,
+            this.listDefault,
+            this.userId
+        );
+    }
+
+    updateBrand(brand: string): Product {
+        return new Product(
+            this.id,
+            this.name,
+            brand,
+            this.listDefault,
+            this.userId
+        );
+    }
 }

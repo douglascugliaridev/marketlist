@@ -1,19 +1,12 @@
-import { ValidationError } from "../../../shared/errors/ValidationError";
+import { PurchaseValidationService } from "../../service/PurchaseValidationService";
 
 export class PurchaseId {
     private constructor(private readonly value: string) { }
 
     static create(id: string): PurchaseId {
-        if (!id || id.trim().length === 0) {
-            throw new ValidationError("ID da compra é obrigatório");
-        }
+        PurchaseValidationService.validatePurchaseIdFormat(id);
 
         const trimmedId = id.trim();
-
-        if (!this.isValid(trimmedId)) {
-            throw new ValidationError("ID da compra inválido");
-        }
-
         return new PurchaseId(trimmedId);
     }
 
@@ -23,11 +16,5 @@ export class PurchaseId {
 
     equals(other: PurchaseId): boolean {
         return this.value === other.value;
-    }
-
-    private static isValid(id: string): boolean {
-        return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-            id
-        );
     }
 }

@@ -3,7 +3,7 @@ import { ProductItem } from "../model/product-item.entity";
 import { Product } from "../../product/model/product.entity";
 import { Purchase } from "../../purchase/model/purchase.entity";
 import { IUUIDProvider } from "../../shared/IUUIDProvider";
-import { BadRequest } from "../../shared/errors/BadRequest";
+import { ProductItemValidationService } from "../service/ProductItemValidationService";
 
 interface CreateProductItemProps {
     id?: string;
@@ -29,9 +29,7 @@ export class CreateProductItemUseCase {
             props.productId
         );
 
-        if (existingItem) {
-            throw new BadRequest("Este produto já foi adicionado à compra");
-        }
+        ProductItemValidationService.validateUniqueProductItem(existingItem);
 
         const productItem = ProductItem.create({
             id: props.id || this.uuidProvider.generate(),

@@ -1,10 +1,8 @@
-import { BadRequest } from "../../../shared/errors/BadRequest";
+import { ProductItemValidationService } from "../../service/ProductItemValidationService";
 
 export class Amount {
     constructor(private readonly value: number) {
-        if (value < 0) {
-            throw new BadRequest('Amount não pode ser negativo');
-        }
+        ProductItemValidationService.validateProductItemAmount(value);
     }
 
     getValue(): number {

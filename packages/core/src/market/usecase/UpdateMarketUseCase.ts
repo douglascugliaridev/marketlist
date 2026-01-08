@@ -1,6 +1,5 @@
 import { IMarketRepository } from "../provider/IMarketRepository";
-import { NotFoundError } from "../../shared/errors/NotFoundError";
-import { ConflictError } from "../../shared/errors/ConflictError";
+import { MarketValidationService } from "../service/MarketValidationService";
 
 interface MarketProps {
     id: string;
@@ -15,18 +14,18 @@ export class UpdateMarketUseCase {
     async execute(marketProps: MarketProps): Promise<void> {
         const market = await this.marketRepository.findById(marketProps.id);
 
-        if (!market) {
-            throw new NotFoundError("Market not found");
-        }
+        const validatedMarket = MarketValidationService.validateMarketExists(market, 'id');
 
         // Verificar se já existe outro mercado com o mesmo nome
         const existingMarket = await this.marketRepository.findByName(marketProps.name);
-        if (existingMarket && existingMarket.getId() !== marketProps.id) {
-            throw new ConflictError("Já existe um supermercado com este nome");
-        }
+        MarketValidationService.validateUniqueMarketForUpdate(
+            existingMarket,
+            marketProps.id,
+            marketProps.name
+        );
 
         // Atualizar o nome usando o método da entidade
-        const updatedMarket = market.updateName(marketProps.name);
+        const updatedMarket = validatedMarket.updateName(marketProps.name);
 
         await this.marketRepository.save(updatedMarket);
     }

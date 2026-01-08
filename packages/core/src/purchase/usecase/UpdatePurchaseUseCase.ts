@@ -1,5 +1,5 @@
 import { IPurchaseRepository } from "../provider/IPurchaseRepository";
-import { NotFoundError } from "../../shared/errors/NotFoundError";
+import { PurchaseValidationService } from "../service/PurchaseValidationService";
 
 interface UpdatePurchaseProps {
     id: string;
@@ -14,9 +14,7 @@ export class UpdatePurchaseUseCase {
     async execute(props: UpdatePurchaseProps): Promise<void> {
         const existingPurchase = await this.purchaseRepository.findById(props.id);
 
-        if (!existingPurchase) {
-            throw new NotFoundError("Compra não encontrada");
-        }
+        PurchaseValidationService.validatePurchaseExists(existingPurchase);
 
         await this.purchaseRepository.update(props.id, props.name);
     }

@@ -1,6 +1,5 @@
 import { IMarketRepository } from "../provider/IMarketRepository";
-import { NotFoundError } from "../../shared/errors/NotFoundError";
-import { BadRequest } from "../../shared/errors/BadRequest";
+import { MarketValidationService } from "../service/MarketValidationService";
 
 export class DeleteMarketUseCase {
     constructor(
@@ -8,14 +7,10 @@ export class DeleteMarketUseCase {
     ) { }
 
     async execute(id: string): Promise<void> {
-        if (!id) {
-            throw new BadRequest("Market ID is required");
-        }
+        MarketValidationService.validateMarketId(id);
 
         const existingMarket = await this.marketRepository.findById(id);
-        if (!existingMarket) {
-            throw new NotFoundError("Market not found");
-        }
+        MarketValidationService.validateMarketExists(existingMarket, 'id');
 
         await this.marketRepository.delete(id);
     }

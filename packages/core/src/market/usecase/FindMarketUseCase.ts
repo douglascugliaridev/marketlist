@@ -1,7 +1,6 @@
 import { IMarketRepository } from "../provider/IMarketRepository";
-import { NotFoundError } from "../../shared/errors/NotFoundError";
 import { Market } from "../model/market.entity";
-import { BadRequest } from "../../shared/errors/BadRequest";
+import { MarketValidationService } from "../service/MarketValidationService";
 
 interface MarketProps {
     id?: string;
@@ -14,19 +13,15 @@ export class FindMarketUseCase {
     ) { }
 
     async execute(marketProps: MarketProps): Promise<Market> {
-        if (!marketProps.id && !marketProps.name) {
-            throw new BadRequest("At least one search parameter (id or name) must be provided");
-        }
+        MarketValidationService.validateSearchCriteria(marketProps.id, marketProps.name);
 
         const market = marketProps.id
             ? await this.marketRepository.findById(marketProps.id)
             : await this.marketRepository.findByName(marketProps.name!);
 
-        if (!market) {
-            const searchType = marketProps.id ? "ID" : "name";
-            throw new NotFoundError(`Market not found by ${searchType}`);
-        }
-
-        return market;
+        return MarketValidationService.validateMarketExists(
+            market,
+            marketProps.id ? 'id' : 'name'
+        );
     }
 }

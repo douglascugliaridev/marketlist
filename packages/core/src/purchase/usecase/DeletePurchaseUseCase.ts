@@ -1,5 +1,5 @@
 import { IPurchaseRepository } from "../provider/IPurchaseRepository";
-import { NotFoundError } from "../../shared/errors/NotFoundError";
+import { PurchaseValidationService } from "../service/PurchaseValidationService";
 
 export class DeletePurchaseUseCase {
     constructor(
@@ -9,9 +9,7 @@ export class DeletePurchaseUseCase {
     async execute(id: string): Promise<void> {
         const existingPurchase = await this.purchaseRepository.findById(id);
 
-        if (!existingPurchase) {
-            throw new NotFoundError("Compra não encontrada");
-        }
+        PurchaseValidationService.validatePurchaseExists(existingPurchase);
 
         await this.purchaseRepository.delete(id);
     }

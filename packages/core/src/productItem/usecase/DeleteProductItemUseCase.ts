@@ -1,5 +1,5 @@
 import { IProductItemRepository } from "../provider/IProductItemRepository";
-import { NotFoundError } from "../../shared/errors/NotFoundError";
+import { ProductItemValidationService } from "../service/ProductItemValidationService";
 
 export class DeleteProductItemUseCase {
     constructor(
@@ -9,9 +9,7 @@ export class DeleteProductItemUseCase {
     async execute(id: string): Promise<void> {
         const existingItem = await this.productItemRepository.findById(id);
 
-        if (!existingItem) {
-            throw new NotFoundError("Item do produto não encontrado");
-        }
+        ProductItemValidationService.validateProductItemExists(existingItem);
 
         await this.productItemRepository.delete(id);
     }

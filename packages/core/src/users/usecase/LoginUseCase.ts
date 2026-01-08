@@ -1,7 +1,7 @@
 import { IUserRepository } from "../provider/IUserRepository";
 import { IPasswordHasher } from "../provider/IPasswordHasher";
 import { UserPasswordPlain } from "../model/value-objects/UserPasswordPlain";
-import { AuthenticationError } from "../../shared/errors/AuthenticationError";
+import { UserValidationService } from "../service/UserValidationService";
 
 interface Input {
     email: string;
@@ -25,23 +25,19 @@ export class LoginUseCase {
 
         const user = await this.userRepository.findByEmail(input.email);
 
-        if (!user) {
-            throw new AuthenticationError();
-        }
+        const validatedUser = UserValidationService.validateAuthentication(user);
 
-        const isAuthenticated = await user.authenticate(
+        const isAuthenticated = await validatedUser.authenticate(
             password,
             this.passwordHasher
         );
 
-        if (!isAuthenticated) {
-            throw new AuthenticationError();
-        }
+        UserValidationService.validateCredentials(isAuthenticated);
 
         return {
-            userId: user.getId(),
-            name: user.getName(),
-            email: user.getEmail(),
+            userId: validatedUser.getId(),
+            name: validatedUser.getName(),
+            email: validatedUser.getEmail(),
         };
     }
 }

@@ -1,7 +1,7 @@
 import { IMarketRepository } from "../provider/IMarketRepository";
 import { Market } from "../model/market.entity";
 import { IUUIDProvider } from "../../shared/IUUIDProvider";
-import { ConflictError } from "../../shared/errors/ConflictError";
+import { MarketValidationService } from "../service/MarketValidationService";
 
 interface MarketProps {
     id?: string;
@@ -18,9 +18,7 @@ export class CreateMarketUseCase {
     async execute(marketProps: MarketProps): Promise<{ marketId: string }> {
         const existingMarket = await this.marketRepository.findByName(marketProps.name);
 
-        if (existingMarket) {
-            throw new ConflictError("Já existe um supermercado com este nome");
-        }
+        MarketValidationService.validateUniqueMarket(existingMarket, marketProps.name);
 
         const market = Market.create({
             id: this.uuidProvider.generate(),

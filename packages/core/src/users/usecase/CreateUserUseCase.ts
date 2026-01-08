@@ -7,7 +7,7 @@ import { UserName } from "../model/value-objects/UserName";
 import { UserEmail } from "../model/value-objects/UserEmail";
 import { UserPasswordPlain } from "../model/value-objects/UserPasswordPlain";
 import { UserPasswordHash } from "../model/value-objects/UserPasswordHash";
-import { ConflictError } from "../../shared/errors/ConflictError";
+import { UserValidationService } from "../service/UserValidationService";
 
 interface Input {
     name: string;
@@ -26,9 +26,7 @@ export class CreateUserUseCase {
         const emailAlreadyExists =
             await this.userRepository.findByEmail(input.email);
 
-        if (emailAlreadyExists) {
-            throw new ConflictError("Email já está em uso");
-        }
+        UserValidationService.validateUniqueEmail(emailAlreadyExists, input.email);
 
         const userId = UserId.create(this.uuidProvider.generate());
         const name = UserName.create(input.name);
