@@ -11,8 +11,6 @@ export class Purchase {
         private readonly userId: UserId,
         private readonly marketId: MarketId,
         private readonly items: ProductItem[],
-        private readonly createdAt: Date,
-        private readonly updatedAt: Date
     ) { }
 
     getId(): string {
@@ -33,14 +31,6 @@ export class Purchase {
 
     getItems(): ProductItem[] {
         return [...this.items];
-    }
-
-    getCreatedAt(): Date {
-        return this.createdAt;
-    }
-
-    getUpdatedAt(): Date {
-        return this.updatedAt;
     }
 
     // Calcula o total da compra somando todos os itens
@@ -69,18 +59,13 @@ export class Purchase {
         userId: string;
         marketId: string;
         items?: ProductItem[];
-        createdAt?: Date;
-        updatedAt?: Date;
     }): Purchase {
-        const now = new Date();
         return new Purchase(
             PurchaseId.create(props.id),
             PurchaseName.create(props.name),
             UserId.create(props.userId),
             MarketId.create(props.marketId),
-            props.items || [],
-            props.createdAt || now,
-            props.updatedAt || now
+            props.items || []
         );
     }
 }

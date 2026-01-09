@@ -6,11 +6,11 @@ export class DeleteProductItemUseCase {
         private readonly productItemRepository: IProductItemRepository
     ) { }
 
-    async execute(id: string): Promise<void> {
-        const existingItem = await this.productItemRepository.findById(id);
+    async execute(productId: string, purchaseId: string): Promise<void> {
+        const existingItem = await this.productItemRepository.findByPurchaseAndProduct(purchaseId, productId);
 
         ProductItemValidationService.validateProductItemExists(existingItem);
 
-        await this.productItemRepository.delete(id);
+        await this.productItemRepository.delete(productId, purchaseId);
     }
 }

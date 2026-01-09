@@ -7,9 +7,10 @@ import { PrismaUserRepository } from './auth/prisma-user.repository';
 import { MarketModule } from './market/market.module';
 import { ProductModule } from './product/product.module';
 import { ProductItemModule } from './product-item/product-item.module';
+import { PurchaseModule } from './purchase/purchase.module';
 
 @Module({
-  imports: [AuthModule, DbModule, MarketModule, ProductModule, ProductItemModule],
+  imports: [AuthModule, DbModule, MarketModule, ProductModule, ProductItemModule, PurchaseModule],
   controllers: [AppController],
   providers: [AppService, PrismaUserRepository],
 })

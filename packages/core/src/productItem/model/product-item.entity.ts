@@ -1,31 +1,21 @@
-import { ProductItemId } from "./value-objects/ProductItemId";
-import { Product } from "../../product/model/product.entity";
-import { Purchase } from "../../purchase/model/purchase.entity";
 import { Price } from "./value-objects/Price";
 import { Amount } from "./value-objects/Amount";
 
 export class ProductItem {
     private constructor(
-        private readonly id: ProductItemId,
-        private readonly product: Product,
-        private readonly purchase: Purchase,
+        private readonly productId: string,
+        private readonly purchaseId: string,
         private readonly price: Price,
         private readonly previousPrice: Price,
-        private readonly amount: Amount,
-        private readonly createdAt: Date,
-        private readonly updatedAt: Date
+        private readonly amount: Amount
     ) { }
 
-    getId(): string {
-        return this.id.getValue();
+    getProductId(): string {
+        return this.productId;
     }
 
-    getProduct(): Product {
-        return this.product;
-    }
-
-    getPurchase(): Purchase {
-        return this.purchase;
+    getPurchaseId(): string {
+        return this.purchaseId;
     }
 
     getPrice(): Price {
@@ -35,15 +25,6 @@ export class ProductItem {
     getAmount(): Amount {
         return this.amount;
     }
-
-    getCreatedAt(): Date {
-        return this.createdAt;
-    }
-
-    getUpdatedAt(): Date {
-        return this.updatedAt;
-    }
-
 
     // Calcula o preço total do item (preço unitário * quantidade)
     getTotalPrice(): number {
@@ -62,29 +43,22 @@ export class ProductItem {
 
     // Verificar se este item de produto é igual a outro
     equals(other: ProductItem): boolean {
-        return this.id.getValue() === other.getId();
+        return this.productId === other.getProductId();
     }
 
     static create(props: {
-        id: string;
-        product: Product;
-        purchase: Purchase;
+        productId: string;
+        purchaseId: string;
         price: number;
         previousPrice: number;
         amount: number;
-        createdAt?: Date;
-        updatedAt?: Date;
     }): ProductItem {
-        const now = new Date();
         return new ProductItem(
-            ProductItemId.create(props.id),
-            props.product,
-            props.purchase,
+            props.productId,
+            props.purchaseId,
             new Price(props.price),
             new Price(props.previousPrice),
-            new Amount(props.amount),
-            props.createdAt || now,
-            props.updatedAt || now
+            new Amount(props.amount)
         );
     }
 }

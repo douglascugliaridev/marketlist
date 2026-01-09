@@ -51,6 +51,13 @@ export class ProductItemValidationService {
         return productItem;
     }
 
+    static validateProductItemsExist(items: ProductItem[] | null): ProductItem[] {
+        if (!items || items.length === 0) {
+            throw new ProductItemNotFoundException("Nenhum item encontrado para esta compra");
+        }
+        return items;
+    }
+
     static validateUniqueProductItem(existingItem: ProductItem | null): void {
         if (existingItem) {
             throw new ProductItemAlreadyExistsException("Este produto já foi adicionado à compra");

@@ -28,7 +28,7 @@ import { PurchaseId, PurchaseName } from "./purchase/model/value-objects/index";
 import { ProductItem } from "./productItem/model/product-item.entity";
 import { IProductItemRepository } from "./productItem/provider/IProductItemRepository";
 import { CreateProductItemUseCase, UpdateProductItemUseCase, DeleteProductItemUseCase, FindProductItemsByPurchaseUseCase } from "./productItem/usecase/index";
-import { ProductItemId, Price, Amount } from "./productItem/model/value-objects/index";
+import { Price, Amount } from "./productItem/model/value-objects/index";
 
 // Market exports
 export { CreateMarketUseCase, UpdateMarketUseCase, DeleteMarketUseCase, FindMarketUseCase };
@@ -50,7 +50,7 @@ export { PurchaseId, PurchaseName };
 // ProductItem exports
 export { ProductItem, IProductItemRepository };
 export { CreateProductItemUseCase, UpdateProductItemUseCase, DeleteProductItemUseCase, FindProductItemsByPurchaseUseCase };
-export { ProductItemId, Price, Amount };
+export { Price, Amount };
 
 // Shared exports
 export { DomainError };

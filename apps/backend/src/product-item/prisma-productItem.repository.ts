@@ -8,33 +8,37 @@ export class PrismaProductItemRepository implements IProductItemRepository {
 
     async save(productItem: ProductItem): Promise<void> {
         await this.prisma.productItem.upsert({
-            where: { id: productItem.getId() },
+            where: {
+                productId_purchaseId: {
+                    productId: productItem.getProductId(),
+                    purchaseId: productItem.getPurchaseId()
+                }
+            },
             create: {
-                id: productItem.getId(),
                 purchaseId: productItem.getPurchaseId(),
                 productId: productItem.getProductId(),
-                price: productItem.getPrice(),
-                amount: productItem.getAmount()
+                price: productItem.getPrice().getValue(),
+                previousPrice: productItem.getPreviousPrice().getValue(),
+                amount: productItem.getAmount().getValue()
             },
             update: {
-                purchaseId: productItem.getPurchaseId(),
-                productId: productItem.getProductId(),
-                price: productItem.getPrice(),
-                amount: productItem.getAmount()
+                price: productItem.getPrice().getValue(),
+                previousPrice: productItem.getPreviousPrice().getValue(),
+                amount: productItem.getAmount().getValue()
             }
         })
     }
-    async findById(id: string): Promise<ProductItem | null> {
-        const productItem = await this.prisma.productItem.findUnique({ where: { id } })
+    async findByPurchaseAndProduct(purchaseId: string, productId: string): Promise<ProductItem | null> {
+        const productItem = await this.prisma.productItem.findUnique({ where: { productId_purchaseId: { productId, purchaseId } } })
         if (!productItem) {
             return null
         }
         return ProductItem.create({
-            id: productItem.id,
-            purchaseId: productItem.purchaseId,
             productId: productItem.productId,
+            purchaseId: productItem.purchaseId,
             price: productItem.price,
-            amount: productItem.amount
+            previousPrice: productItem.previousPrice || 0,
+            amount: Number(productItem.amount)
         })
     }
     async findByPurchaseId(purchaseId: string): Promise<ProductItem[]> {
@@ -43,37 +47,25 @@ export class PrismaProductItemRepository implements IProductItemRepository {
             return []
         }
         return productItems.map(productItem => ProductItem.create({
-            id: productItem.id,
-            purchaseId: productItem.purchaseId,
             productId: productItem.productId,
+            purchaseId: productItem.purchaseId,
             price: productItem.price,
-            amount: productItem.amount
+            previousPrice: productItem.previousPrice || 0,
+            amount: Number(productItem.amount)
         }))
     }
-    async findByProductId(productId: string): Promise<ProductItem[]> {
-        const productItems = await this.prisma.productItem.findMany({ where: { productId } })
-        if (!productItems) {
-            return []
-        }
-        return productItems.map(productItem => ProductItem.create({
-            id: productItem.id,
-            purchaseId: productItem.purchaseId,
-            productId: productItem.productId,
-            price: productItem.price,
-            amount: productItem.amount
-        }))
-    }
-    async findByPurchaseAndProduct(purchaseId: string, productId: string): Promise<ProductItem | null> {
-        const productItem = await this.prisma.productItem.findUnique({ where: { purchaseId_productId: { purchaseId, productId } } })
+    async findByProductId(productId: string): Promise<ProductItem | null> {
+        const productItem = await this.prisma.productItem.findFirst({ where: { productId } })
+
         if (!productItem) {
             return null
         }
         return ProductItem.create({
-            id: productItem.id,
-            purchaseId: productItem.purchaseId,
             productId: productItem.productId,
+            purchaseId: productItem.purchaseId,
             price: productItem.price,
-            amount: productItem.amount
+            previousPrice: productItem.previousPrice || 0,
+            amount: Number(productItem.amount)
         })
     }
     async findAll(): Promise<ProductItem[]> {
@@ -82,34 +74,39 @@ export class PrismaProductItemRepository implements IProductItemRepository {
             return []
         }
         return productItems.map(productItem => ProductItem.create({
-            id: productItem.id,
-            purchaseId: productItem.purchaseId,
             productId: productItem.productId,
+            purchaseId: productItem.purchaseId,
             price: productItem.price,
-            amount: productItem.amount
+            previousPrice: productItem.previousPrice || 0,
+            amount: Number(productItem.amount)
         }))
     }
-    async delete(id: string): Promise<ProductItem | null> {
-        const productItem = await this.prisma.productItem.delete({ where: { id } })
+    async delete(productId: string, purchaseId: string): Promise<ProductItem | null> {
+        const productItem = await this.prisma.productItem.delete({
+            where: { productId_purchaseId: { productId, purchaseId } }
+        })
         if (!productItem) {
             return null
         }
         return ProductItem.create({
-            id: productItem.id,
-            purchaseId: productItem.purchaseId,
             productId: productItem.productId,
+            purchaseId: productItem.purchaseId,
             price: productItem.price,
-            amount: productItem.amount
+            previousPrice: productItem.previousPrice || 0,
+            amount: Number(productItem.amount)
         })
     }
     async deleteByPurchaseId(purchaseId: string): Promise<void> {
         await this.prisma.productItem.deleteMany({ where: { purchaseId } })
     }
-    async update(id: string, price?: number, amount?: number): Promise<void> {
-        await this.prisma.productItem.update({ where: { id }, data: { price, amount } })
+    async update(productId: string, purchaseId: string, price?: number, amount?: number): Promise<void> {
+        await this.prisma.productItem.update({
+            where: { productId_purchaseId: { productId, purchaseId } },
+            data: { price, amount }
+        })
     }
     async findLastPriceByProduct(productId: string): Promise<number | null> {
-        const productItem = await this.prisma.productItem.findFirst({ where: { productId }, orderBy: { createdAt: 'desc' } })
+        const productItem = await this.prisma.productItem.findFirst({ where: { productId }, orderBy: { purchaseId: 'desc' } })
         if (!productItem) {
             return null
         }

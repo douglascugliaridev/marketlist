@@ -57,9 +57,7 @@ export class CreatePurchaseFromDefaultListUseCase {
                 purchaseId: purchase.getId(),
                 price: previousPrice, // preço atual igual ao último registrado
                 previousPrice: previousPrice,
-                amount: 1, // quantidade padrão
-                product: product,
-                purchase: purchase
+                amount: 1 // quantidade padrão
             });
 
             // Buscar o ProductItem criado para retornar

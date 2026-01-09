@@ -1,28 +1,35 @@
 import { IProductItemRepository } from "../provider/IProductItemRepository";
+import { IProductRepository } from "../../product/provider/IProductRepository";
 import { ProductItem } from "../model/product-item.entity";
-import { Product } from "../../product/model/product.entity";
-import { Purchase } from "../../purchase/model/purchase.entity";
-import { IUUIDProvider } from "../../shared/IUUIDProvider";
 import { ProductItemValidationService } from "../service/ProductItemValidationService";
+import { ProductValidationService } from "../../product/service/ProductValidationService";
 
 interface CreateProductItemProps {
-    id?: string;
     productId: string;
     purchaseId: string;
     price: number;
     previousPrice: number;
     amount: number;
-    product: Product;
-    purchase: Purchase;
 }
 
 export class CreateProductItemUseCase {
     constructor(
         private readonly productItemRepository: IProductItemRepository,
-        private readonly uuidProvider: IUUIDProvider
+        private readonly productRepository: IProductRepository,
     ) { }
 
-    async execute(props: CreateProductItemProps): Promise<{ productItemId: string }> {
+    async execute(props: CreateProductItemProps): Promise<{}> {
+
+        ProductItemValidationService.validateProductItemAmount(props.amount);
+        ProductItemValidationService.validateProductItemPrice(props.price);
+        ProductItemValidationService.validateProductItemPrice(props.previousPrice);
+        ProductItemValidationService.validateProductItemPurchaseIdFormat(props.purchaseId);
+        ProductValidationService.validateProductIdFormat(props.productId);
+
+        // Verificar se o produto existe na tabela produto
+        const product = await this.productRepository.findById(props.productId);
+        ProductValidationService.validateProductExists(product, 'id');
+
         // Verificar se já existe um item para este produto nesta compra
         const existingItem = await this.productItemRepository.findByPurchaseAndProduct(
             props.purchaseId,
@@ -32,9 +39,8 @@ export class CreateProductItemUseCase {
         ProductItemValidationService.validateUniqueProductItem(existingItem);
 
         const productItem = ProductItem.create({
-            id: props.id || this.uuidProvider.generate(),
-            product: props.product,
-            purchase: props.purchase,
+            productId: props.productId,
+            purchaseId: props.purchaseId,
             price: props.price,
             previousPrice: props.previousPrice,
             amount: props.amount
@@ -42,6 +48,6 @@ export class CreateProductItemUseCase {
 
         await this.productItemRepository.save(productItem);
 
-        return { productItemId: productItem.getId() };
+        return {};
     }
 }
