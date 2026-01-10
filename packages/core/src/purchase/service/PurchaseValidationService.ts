@@ -26,11 +26,18 @@ export class PurchaseNotFoundException extends DomainError {
 }
 
 export class PurchaseValidationService {
-    static validatePurchaseExists(purchase: Purchase | Purchase[] | null): Purchase | Purchase[] {
+    static validatePurchaseExists(purchase: Purchase | null): Purchase {
         if (!purchase) {
             throw new PurchaseNotFoundException("Compra não encontrada");
         }
-        return purchase || [];
+        return purchase;
+    }
+
+    static validatePurchaseListExists(purchases: Purchase[] | null): Purchase[] {
+        if (!purchases) {
+            throw new PurchaseNotFoundException("Compras não encontradas");
+        }
+        return purchases;
     }
 
     static validatePurchaseIdFormat(id: string): void {

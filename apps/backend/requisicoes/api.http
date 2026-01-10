@@ -20,7 +20,7 @@ POST http://localhost:4000/auth/login
 Content-Type: application/json
 
 {
-  "email": "usuario@formacao.dev",
+  "email": "usuarioformacao@formacao.dev",
   "password": "#Senha123"
 }
 
@@ -30,7 +30,7 @@ Content-Type: application/json
 ### ------------------ CREATE MARKET ------------------
 
 # @name create
-@uuidMarket = b4a64bcd-9a1f-4ddb-bdef-2d153be7c3a2
+@uuidMarket = {{create.response.body.id}}
 
 POST http://localhost:4000/market
 Content-Type: application/json
@@ -38,7 +38,7 @@ Authorization: Bearer {{token}}
 
 {
   "name": "Bistek",
-  "userId": "{{userId}}"
+  "userId": "86fc5d42-4221-42fe-bd27-337a420f0eb5"
 }
 
 ### ------------------ GET MARKETS -----------------------
@@ -49,14 +49,14 @@ Authorization: Bearer {{token}}
 ###
 
 ### ------------------ GET MARKET BY ID ------------------
-GET http://localhost:4000/market/{{uuidMarket}}
+GET http://localhost:4000/market/1333043d-3952-44c0-ba47-dccd3d3ee929
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ###
 
 ### ------------------ UPDATE MARKET ------------------
-PATCH http://localhost:4000/market/{{uuidMarket}}
+PATCH http://localhost:4000/market/1333043d-3952-44c0-ba47-dccd3d3ee929
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -67,7 +67,7 @@ Authorization: Bearer {{token}}
 ###
 
 ### ------------------ DELETE MARKET ------------------
-DELETE http://localhost:4000/market/{{uuidMarket}}
+DELETE http://localhost:4000/market/1333043d-3952-44c0-ba47-dccd3d3ee929
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -87,17 +87,16 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "Feijão",
-  "brand": "Feijão",
-  "price": 10.00,
-  "userId": "{{userId}}",
-  "marketId": "{{uuidMarket}}"
+  "name": "Macarrão",
+  "brand": "Gallo",
+  "listDefault": true,
+  "userId": "86fc5d42-4221-42fe-bd27-337a420f0eb5"
 }
 
 ###
 
 ### ------------------ GET PRODUCT BY ID ------------------
-GET http://localhost:4000/product/1dbc045a-712e-4489-95c0-2a77b3f7a202
+GET http://localhost:4000/product/e254d13e-6a3c-43d0-b9ff-f501f16a6d34
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -132,7 +131,7 @@ Authorization: Bearer {{token}}
 ###
 
 ### ----------------- UPDATE PRODUCT ------------------
-PATCH http://localhost:4000/product/3862b247-3ff4-4597-a257-8529a65e0bbc
+PATCH http://localhost:4000/product/e254d13e-6a3c-43d0-b9ff-f501f16a6d34
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -149,3 +148,42 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ### 
+
+### ---------------------- PURCHASE --------------------------
+
+### ------------------ CREATE PURCHASE ------------------
+# @name create
+@uuidMarket = 313bfd3a-092e-4ad2-ad78-e3e69a99fa9b
+@userId = 86fc5d42-4221-42fe-bd27-337a420f0eb5
+
+POST http://localhost:4000/purchase
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Compra de Janeiro",
+  "userId": "{{userId}}",
+  "marketId": "{{uuidMarket}}"
+}
+
+###
+
+### ---------------------- PRODUCT ITEM --------------------------
+
+### ------------------ CREATE PRODUCT ITEM ------------------
+# @name create
+@uuidProduct = b9548ec6-1bb7-44e4-b1b3-cb04f34cde6f
+@uuidPurchase = d8e9da83-8f21-49c7-b46b-893170b41a50
+
+POST http://localhost:4000/product-item
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "productId": "{{uuidProduct}}",
+  "purchaseId": "{{uuidPurchase}}",
+  "price": 10.00,
+  "amount": 1
+}
+
+###

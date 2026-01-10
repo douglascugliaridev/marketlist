@@ -22,7 +22,7 @@ export class CreateProductItemUseCase {
 
         ProductItemValidationService.validateProductItemAmount(props.amount);
         ProductItemValidationService.validateProductItemPrice(props.price);
-        ProductItemValidationService.validateProductItemPrice(props.previousPrice);
+        //   ProductItemValidationService.validateProductItemPrice(props.previousPrice);
         ProductItemValidationService.validateProductItemPurchaseIdFormat(props.purchaseId);
         ProductValidationService.validateProductIdFormat(props.productId);
 
@@ -48,6 +48,6 @@ export class CreateProductItemUseCase {
 
         await this.productItemRepository.save(productItem);
 
-        return {};
+        return productItem;
     }
 }

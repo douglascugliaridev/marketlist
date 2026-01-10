@@ -12,20 +12,20 @@ export class PurchaseController {
     return await this.purchaseService.create(createPurchaseDto);
   }
 
-  @Get(':id')
-  async findById(@Param('id') id: string) {
-    return await this.purchaseService.findById(id);
-  }
+  // @Get(':id')
+  // async findById(@Param('id') id: string) {
+  //   return await this.purchaseService.findById(id);
+  // }
 
-  @Get(':userId')
-  async findByUserId(@Param('userId') userId: string) {
-    return await this.purchaseService.findByUserId(userId);
-  }
+  // @Get(':userId')
+  // async findByUserId(@Param('userId') userId: string) {
+  //   return await this.purchaseService.findByUserId(userId);
+  // }
 
-  @Get(':marketId')
-  async findByMarketId(@Param('marketId') marketId: string) {
-    return await this.purchaseService.findByMarketId(marketId);
-  }
+  // @Get(':marketId')
+  // async findByMarketId(@Param('marketId') marketId: string) {
+  //   return await this.purchaseService.findByMarketId(marketId);
+  // }
 
   @Get()
   async findAll() {

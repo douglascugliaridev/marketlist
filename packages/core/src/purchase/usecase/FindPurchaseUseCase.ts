@@ -8,8 +8,8 @@ export class FindPurchaseUseCase {
     ) { }
 
     async execute(): Promise<Purchase[]> {
-        const purchase = await this.purchaseRepository.findAll()
+        const purchases = await this.purchaseRepository.findAll()
 
-        return PurchaseValidationService.validatePurchaseExists(purchase);
+        return PurchaseValidationService.validatePurchaseListExists(purchases);
     }
 }
