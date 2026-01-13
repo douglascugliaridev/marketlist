@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ProductResponseDto } from './dto/product-response.dto';
 import { CreateProductUseCase, UpdateProductUseCase, FindProductUseCase, FindDefaultProductsUseCase, DeleteProductUseCase } from '@marketlist/core';
 import { UUIDAdapter } from 'src/shared/uuid.adapter';
 import { PrismaProductRepository } from './prisma-product.repository';
@@ -31,17 +30,17 @@ export class ProductService {
 
   async findById(id: string) {
     const product = await this.findProductUseCase.execute({ id });
-    return ProductResponseDto.fromProduct(product);
+    return product;
   }
 
   async findByName(name: string) {
     const products = await this.findProductUseCase.execute({ name });
-    return ProductResponseDto.fromProducts(Array.isArray(products) ? products : [products]);
+    return Array.isArray(products) ? products : [products];
   }
 
   async findByUserId(userId: string) {
     const products = await this.productRepository.findByUserId(userId);
-    return ProductResponseDto.fromProducts(products);
+    return products;
   }
 
   async findDefault(userId: string) {
@@ -49,7 +48,7 @@ export class ProductService {
       throw new Error('userId is required');
     }
     const products = await this.findDefaultProductsUseCase.execute(userId);
-    return ProductResponseDto.fromProducts(Array.isArray(products) ? products : [products]);
+    return Array.isArray(products) ? products : [products];
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {

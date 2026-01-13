@@ -6,7 +6,7 @@ export class MarketName {
     static create(name: string): MarketName {
         MarketValidationService.validateMarketNameFormat(name);
 
-        const trimmedName = name.trim().toLowerCase();
+        const trimmedName = name.trim().charAt(0).toUpperCase() + name.slice(1).toLowerCase();
         return new MarketName(trimmedName);
     }
 
@@ -15,7 +15,7 @@ export class MarketName {
     }
 
     getNormalizedValue(): string {
-        return this.value.toLowerCase();
+        return this.value.charAt(0).toUpperCase() + this.value.slice(1).toLowerCase();
     }
 
     equals(other: MarketName): boolean {
@@ -23,6 +23,6 @@ export class MarketName {
     }
 
     equalsIgnoreCase(otherName: string): boolean {
-        return this.getNormalizedValue() === otherName.trim().toLowerCase();
+        return this.getNormalizedValue() === otherName.trim().charAt(0).toUpperCase() + otherName.slice(1).toLowerCase();
     }
 }

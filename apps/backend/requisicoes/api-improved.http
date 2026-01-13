@@ -1,0 +1,321 @@
+### ====================== API DE TESTES - MARKETLIST ======================
+### Ambiente: Desenvolvimento
+### Servidor: http://localhost:4000
+### Autor: Douglas Cugliari
+### =============================================================================
+
+### ====================== VARIÁVEIS GLOBAIS ======================
+@baseUrl = http://localhost:4000
+@contentType = application/json
+@userEmail = usuario2@teste.dev
+@userPassword = #Senha123
+
+### ====================== AUTENTICAÇÃO (AUTH) ======================
+
+### ---------------------- REGISTRAR USUÁRIO ----------------------
+# @name register
+POST {{baseUrl}}/auth/register
+Content-Type: {{contentType}}
+
+{
+  "name": "Usuario Teste",
+  "email": "{{userEmail}}",
+  "password": "{{userPassword}}"
+}
+
+###
+
+@userId = {{register.response.body.userId}}
+
+###
+
+### ---------------------- LOGIN ----------------------
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "{{userEmail}}",
+  "password": "{{userPassword}}"
+}
+
+###
+
+@token = {{login.response.body.token}}
+@userId = {{login.response.body.userId}}
+
+###
+
+### ====================== MERCADOS (MARKETS) ======================
+
+### ---------------------- CRIAR MERCADO ----------------------
+# @name createMarket
+POST {{baseUrl}}/market
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Supermercado Central 2",
+  "userId": "{{userId}}"
+}
+
+###
+
+@marketId = {{createMarket.response.body.id}}
+
+###
+
+### ---------------------- LISTAR TODOS OS MERCADOS ----------------------
+GET {{baseUrl}}/market
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### ---------------------- BUSCAR MERCADO POR ID ----------------------
+GET {{baseUrl}}/market/{{marketId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### ---------------------- ATUALIZAR MERCADO ----------------------
+PATCH {{baseUrl}}/market/{{marketId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Supermercado Central - Atualizado"
+}
+
+###
+
+### ---------------------- EXCLUIR MERCADO ----------------------
+DELETE {{baseUrl}}/market/{{marketId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### ====================== PRODUTOS (PRODUCTS) ======================
+
+### ---------------------- CRIAR PRODUTO ----------------------
+# @name createProduct
+POST {{baseUrl}}/product
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Arroz Branco",
+  "brand": "Ligeirinho",
+  "listDefault": true,
+  "userId": "{{userId}}"
+}
+
+###
+
+@productId = {{createProduct.response.body.id}}
+
+###
+
+### ---------------------- BUSCAR PRODUTO POR ID ----------------------
+GET {{baseUrl}}/product/{{productId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### ---------------------- BUSCAR PRODUTOS POR NOME ----------------------
+GET {{baseUrl}}/product/search?name=Arroz
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### ---------------------- BUSCAR PRODUTOS POR MARCA ----------------------
+GET {{baseUrl}}/product?brand=Tio João
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### ---------------------- BUSCAR PRODUTOS DA LISTA PADRÃO ----------------------
+GET {{baseUrl}}/product/default?userId={{userId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### ---------------------- BUSCAR PRODUTOS POR USUÁRIO ----------------------
+GET {{baseUrl}}/product?userId={{userId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### ---------------------- ATUALIZAR PRODUTO ----------------------
+PATCH {{baseUrl}}/product/{{productId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "brand": "Camil"
+}
+
+###
+
+### ---------------------- EXCLUIR PRODUTO ----------------------
+DELETE {{baseUrl}}/product/{{productId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### ====================== COMPRAS (PURCHASES) ======================
+
+### ---------------------- CRIAR COMPRA ----------------------
+# @name createPurchase
+POST {{baseUrl}}/purchase
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Compra de Janeiro 2026",
+  "userId": "{{userId}}",
+  "marketId": "{{marketId}}"
+}
+
+###
+
+@purchaseId = {{createPurchase.response.body.id}}
+
+###
+
+### ---------------------- LISTAR COMPRAS DO USUÁRIO ----------------------
+GET {{baseUrl}}/purchase?userId={{userId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### ---------------------- BUSCAR COMPRA POR ID ----------------------
+GET {{baseUrl}}/purchase/{{purchaseId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### ---------------------- ATUALIZAR COMPRA ----------------------
+PATCH {{baseUrl}}/purchase/{{purchaseId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Compra de Janeiro 2026 - Atualizada"
+}
+
+###
+
+### ---------------------- EXCLUIR COMPRA ----------------------
+DELETE {{baseUrl}}/purchase/{{purchaseId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### ====================== ITENS DE PRODUTO (PRODUCT ITEMS) ======================
+
+### ---------------------- ADICIONAR ITEM À COMPRA ----------------------
+# @name createProductItem
+POST {{baseUrl}}/product-item
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "productId": "{{productId}}",
+  "purchaseId": "{{purchaseId}}",
+  "price": 25.99,
+  "amount": 2
+}
+
+###
+
+@productItemId = {{createProductItem.response.body.id}}
+
+###
+
+### ---------------------- LISTAR ITENS DA COMPRA ----------------------
+GET {{baseUrl}}/product-item?purchaseId={{purchaseId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### ---------------------- ATUALIZAR ITEM DA COMPRA ----------------------
+PATCH {{baseUrl}}/product-item/{{productItemId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "price": 24.99,
+  "amount": 3
+}
+
+###
+
+### ---------------------- EXCLUIR ITEM DA COMPRA ----------------------
+DELETE {{baseUrl}}/product-item/{{productItemId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### ====================== TESTES DE VALIDAÇÃO ======================
+
+### ---------------------- LOGIN COM SENHA INCORRETA ----------------------
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "{{userEmail}}",
+  "password": "senha_errada"
+}
+
+###
+
+### ---------------------- ACESSO SEM TOKEN ----------------------
+GET {{baseUrl}}/market
+Content-Type: {{contentType}}
+
+###
+
+### ---------------------- CRIAR MERCADO SEM AUTORIZAÇÃO ----------------------
+POST {{baseUrl}}/market
+Content-Type: {{contentType}}
+
+{
+  "name": "Mercado Não Autorizado",
+  "userId": "{{userId}}"
+}
+
+###
+
+### ====================== FLUXO COMPLETO DE TESTE ======================
+
+### 1. Registrar usuário
+### 2. Fazer login
+### 3. Criar mercado
+### 4. Criar produto
+### 5. Criar compra
+### 6. Adicionar item à compra
+### 7. Listar todos os dados
+### 8. Limpar dados (opcional)
+
+### ====================== INSTRUÇÕES DE USO ======================
+### 
+### 1. Execute as requisições na ordem numerada
+### 2. As variáveis são automaticamente extraídas das respostas
+### 3. Use os testes de validação para verificar segurança
+### 4. Adaptar dados conforme necessário para seus testes
+### 
+### =============================================================================

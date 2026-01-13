@@ -18,7 +18,7 @@ export class CreateProductUseCase {
         private readonly uuidProvider: IUUIDProvider
     ) { }
 
-    async execute(input: ProductProps): Promise<{ productId: string }> {
+    async execute(input: ProductProps): Promise<Product> {
         const product = Product.create({
             id: this.uuidProvider.generate(),
             name: input.name,
@@ -27,9 +27,8 @@ export class CreateProductUseCase {
             userId: input.userId
         });
 
-
         await this.productRepository.save(product);
 
-        return { productId: product.getId() };
+        return product;
     }
 }

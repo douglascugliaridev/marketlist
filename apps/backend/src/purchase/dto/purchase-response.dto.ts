@@ -7,10 +7,10 @@ export class PurchaseResponseDto {
 
     static fromPurchase(purchase: any): PurchaseResponseDto {
         return {
-            id: purchase.getId(),
-            name: purchase.getName(),
-            userId: purchase.getUserId(),
-            marketId: purchase.getMarketId()
+            id: purchase.id?.value || purchase.id,
+            name: purchase.name?.value || purchase.name,
+            userId: purchase.userId?.value || purchase.userId,
+            marketId: purchase.marketId?.value || purchase.marketId
         };
     }
 

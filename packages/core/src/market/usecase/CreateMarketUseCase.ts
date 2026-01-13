@@ -16,7 +16,9 @@ export class CreateMarketUseCase {
     ) { }
 
     async execute(marketProps: MarketProps): Promise<{ marketId: string }> {
-        const existingMarket = await this.marketRepository.findByName(marketProps.name);
+        const nomeNormalizado = marketProps.name.charAt(0).toUpperCase() + marketProps.name.slice(1).toLowerCase();
+
+        const existingMarket = await this.marketRepository.findByName(nomeNormalizado);
 
         MarketValidationService.validateUniqueMarket(existingMarket, marketProps.name);
 

@@ -15,7 +15,7 @@ export class CreatePurchaseUseCase {
         private readonly uuidProvider: IUUIDProvider
     ) { }
 
-    async execute(purchaseProps: PurchaseProps): Promise<{ purchaseId: string }> {
+    async execute(purchaseProps: PurchaseProps): Promise<Purchase> {
         const purchase = Purchase.create({
             id: purchaseProps.id || this.uuidProvider.generate(),
             name: purchaseProps.name,
@@ -25,6 +25,6 @@ export class CreatePurchaseUseCase {
 
         await this.purchaseRepository.save(purchase);
 
-        return { purchaseId: purchase.getId() };
+        return purchase;
     }
 }
