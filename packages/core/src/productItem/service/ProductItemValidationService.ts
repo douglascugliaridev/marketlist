@@ -66,37 +66,37 @@ export class ProductItemValidationService {
 
     static validateProductItemIdFormat(id: string): void {
         if (!id || id.trim().length === 0) {
-            throw new ProductItemIdValidationException("Product item ID is required");
+            throw new ProductItemIdValidationException("ID do item do produto é obrigatório");
         }
 
         const trimmedId = id.trim();
 
         if (!this.isValidUUID(trimmedId)) {
-            throw new ProductItemIdValidationException("Invalid product item ID format");
+            throw new ProductItemIdValidationException("Formato de ID do item do produto inválido");
         }
     }
 
     static validateProductItemPurchaseIdFormat(id: string): void {
         if (!id || id.trim().length === 0) {
-            throw new ProductItemPurchaseIdValidationException("Product item purchase ID is required");
+            throw new ProductItemPurchaseIdValidationException("ID da compra do item do produto é obrigatório");
         }
 
         const trimmedId = id.trim();
 
         if (!this.isValidUUID(trimmedId)) {
-            throw new ProductItemPurchaseIdValidationException("Invalid product item purchase ID format");
+            throw new ProductItemPurchaseIdValidationException("Formato de ID da compra do item do produto inválido");
         }
     }
 
     static validateProductItemAmount(amount: number): void {
         if (amount < 0) {
-            throw new ProductItemAmountValidationException("Amount cannot be negative");
+            throw new ProductItemAmountValidationException("Quantidade não pode ser negativa");
         }
     }
 
     static validateProductItemPrice(price: number): void {
         if (price < 0) {
-            throw new ProductItemPriceValidationException("Price cannot be negative");
+            throw new ProductItemPriceValidationException("Preço não pode ser negativo");
         }
     }
 

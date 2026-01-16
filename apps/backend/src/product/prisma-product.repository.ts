@@ -91,4 +91,16 @@ export class PrismaProductRepository implements IProductRepository {
             listDefault: product.listDefault
         }))
     }
+
+    async findByBrand(brand: string): Promise<Product[]> {
+        const products = await this.prisma.product.findMany({ where: { brand } })
+        return products.map(product => Product.create({
+            id: product.id,
+            name: product.name,
+            userId: product.userId,
+            brand: product.brand,
+            listDefault: product.listDefault
+        }))
+    }
+
 }

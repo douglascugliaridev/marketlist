@@ -42,13 +42,13 @@ export class PurchaseValidationService {
 
     static validatePurchaseIdFormat(id: string): void {
         if (!id || id.trim().length === 0) {
-            throw new PurchaseIdValidationException("Purchase ID is required");
+            throw new PurchaseIdValidationException("ID da compra é obrigatório");
         }
 
         const trimmedId = id.trim();
 
         if (!this.isValidUUID(trimmedId)) {
-            throw new PurchaseIdValidationException("Invalid purchase ID format");
+            throw new PurchaseIdValidationException("Formato de ID da compra inválido");
         }
     }
 
@@ -61,7 +61,7 @@ export class PurchaseValidationService {
             const trimmedName = name.trim();
 
             if (trimmedName.length > 100) {
-                throw new PurchaseNameValidationException("Purchase name cannot have more than 100 characters");
+                throw new PurchaseNameValidationException("Nome da compra não pode ter mais de 100 caracteres");
             }
         }
     }

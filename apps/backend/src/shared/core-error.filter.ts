@@ -19,6 +19,7 @@ export class CoreErrorFilter implements ExceptionFilter {
         ['ProductIdValidationException', HttpStatus.BAD_REQUEST],
         ['ProductNameValidationException', HttpStatus.BAD_REQUEST],
         ['ProductUserIdValidationException', HttpStatus.BAD_REQUEST],
+        ['ProductAlreadyExistsException', HttpStatus.CONFLICT],
 
         // ProductItem exceptions
         ['ProductItemValidationException', HttpStatus.BAD_REQUEST],

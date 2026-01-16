@@ -16,8 +16,20 @@ export class ProductController {
 
   @Get('default')
   async findDefault(@Query('userId') userId: string) {
-    const product = await this.productService.findDefault(userId);
-    return ProductResponseDto.fromProduct(product);
+    const products = await this.productService.findDefault(userId);
+    return ProductResponseDto.fromProducts(products);
+  }
+
+  @Get('search')
+  async findByName(@Query('name') name: string) {
+    const products = await this.productService.findByName(name);
+    return ProductResponseDto.fromProducts(products);
+  }
+
+  @Get('brand')
+  async findByBrand(@Query('brand') brand: string) {
+    const products = await this.productService.findByBrand(brand);
+    return ProductResponseDto.fromProducts(products);
   }
 
   @Get(':id')
@@ -29,12 +41,6 @@ export class ProductController {
   @Get()
   async findByUserId(@Query('userId') userId: string) {
     const products = await this.productService.findByUserId(userId);
-    return ProductResponseDto.fromProducts(products);
-  }
-
-  @Get('search')
-  async findByName(@Query('name') name: string) {
-    const products = await this.productService.findByName(name);
     return ProductResponseDto.fromProducts(products);
   }
 

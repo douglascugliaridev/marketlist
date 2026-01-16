@@ -7,7 +7,16 @@ export class ProductBrand {
         ProductValidationService.validateProductBrandFormat(brand);
 
         const trimmedBrand = brand.trim();
-        return new ProductBrand(trimmedBrand);
+        const titleCaseBrand = this.toTitleCase(trimmedBrand);
+        return new ProductBrand(titleCaseBrand);
+    }
+
+    private static toTitleCase(str: string): string {
+        return str
+            .toLowerCase()
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
     }
 
     getValue(): string {

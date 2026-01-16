@@ -7,7 +7,16 @@ export class ProductName {
         ProductValidationService.validateProductNameFormat(name);
 
         const trimmedName = name.trim();
-        return new ProductName(trimmedName);
+        const titleCaseName = this.toTitleCase(trimmedName);
+        return new ProductName(titleCaseName);
+    }
+
+    private static toTitleCase(str: string): string {
+        return str
+            .toLowerCase()
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
     }
 
     getValue(): string {

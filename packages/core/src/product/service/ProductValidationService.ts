@@ -1,6 +1,12 @@
 import { Product } from "../model/product.entity";
 import { DomainError } from "../../shared/DomainError";
 
+export class ProductAlreadyExistsException extends DomainError {
+    constructor(message: string) {
+        super(message, 'ProductAlreadyExistsException');
+    }
+}
+
 export class ProductBrandValidationException extends DomainError {
     constructor(message: string) {
         super(message, 'ProductBrandValidationException');
@@ -40,18 +46,18 @@ export class ProductUserIdValidationException extends DomainError {
 export class ProductValidationService {
     static validateSearchCriteria(id?: string, name?: string): void {
         if (!id && !name) {
-            throw new ProductValidationException("Product ID or name is required");
+            throw new ProductValidationException("ID ou nome do produto é obrigatório");
         }
     }
 
     static validateProductExists(product: Product | Product[] | null, searchType: 'id' | 'name'): Product {
         if (!product) {
-            throw new ProductNotFoundException(`Product not found by ${searchType}`);
+            throw new ProductNotFoundException(`Produto não encontrado por ${searchType}`);
         }
 
         if (Array.isArray(product)) {
             if (product.length === 0) {
-                throw new ProductNotFoundException(`Product not found by ${searchType}`);
+                throw new ProductNotFoundException(`Produto não encontrado por ${searchType}`);
             }
             return product[0]; // Retorna o primeiro produto encontrado por nome
         }
@@ -61,28 +67,28 @@ export class ProductValidationService {
 
     static validateProductIdFormat(id: string): void {
         if (!id || id.trim().length === 0) {
-            throw new ProductIdValidationException("Product ID is required");
+            throw new ProductIdValidationException("ID do produto é obrigatório");
         }
 
         const trimmedId = id.trim();
 
         if (!this.isValidUUID(trimmedId)) {
-            throw new ProductIdValidationException("Invalid product ID format");
+            throw new ProductIdValidationException("Formato de ID do produto inválido");
         }
     }
 
     static validateProductNameFormat(name: string): void {
         if (!name || name.trim().length === 0) {
-            throw new ProductNameValidationException("Product name is required");
+            throw new ProductNameValidationException("Nome do produto é obrigatório");
         }
 
         const trimmedName = name.trim();
         if (trimmedName.length < 2) {
-            throw new ProductNameValidationException("Product name must have at least 2 characters");
+            throw new ProductNameValidationException("Nome do produto deve ter pelo menos 2 caracteres");
         }
 
         if (trimmedName.length > 100) {
-            throw new ProductNameValidationException("Product name must have at most 100 characters");
+            throw new ProductNameValidationException("Nome do produto deve ter no máximo 100 caracteres");
         }
     }
 
@@ -92,28 +98,56 @@ export class ProductValidationService {
 
     static validateProductBrandFormat(brand: string): void {
         if (!brand || brand.trim().length === 0) {
-            throw new ProductBrandValidationException("Product brand is required");
+            throw new ProductBrandValidationException("Marca do produto é obrigatória");
         }
 
         const trimmedBrand = brand.trim();
         if (trimmedBrand.length < 1) {
-            throw new ProductBrandValidationException("Product brand must have at least 1 character");
+            throw new ProductBrandValidationException("Marca do produto deve ter pelo menos 1 caractere");
         }
 
         if (trimmedBrand.length > 50) {
-            throw new ProductBrandValidationException("Product brand must have at most 50 characters");
+            throw new ProductBrandValidationException("Marca do produto deve ter no máximo 50 caracteres");
         }
     }
 
     static validateUserIdFormat(userId: string): void {
         if (!userId || userId.trim().length === 0) {
-            throw new ProductUserIdValidationException("User ID is required");
+            throw new ProductUserIdValidationException("ID do usuário é obrigatório");
         }
 
         const trimmedUserId = userId.trim();
 
         if (!this.isValidUUID(trimmedUserId)) {
-            throw new ProductUserIdValidationException("Invalid user ID format");
+            throw new ProductUserIdValidationException("Formato de ID do usuário inválido");
+        }
+    }
+
+    static validateUniqueProduct(existingProducts: Product[], name: string, brand: string): void {
+        const duplicateProduct = existingProducts.find(
+            product => product.getName().toLowerCase() === name.toLowerCase() &&
+                product.getBrand().toLowerCase() === brand.toLowerCase()
+        );
+
+        if (duplicateProduct) {
+            throw new ProductAlreadyExistsException(`Já existe um produto cadastrado com o nome "${name}" e marca "${brand}"`);
+        }
+    }
+
+    static validateUniqueProductForUpdate(
+        existingProducts: Product[],
+        currentProductId: string,
+        name: string,
+        brand: string
+    ): void {
+        const duplicateProduct = existingProducts.find(
+            product => product.getId() !== currentProductId &&
+                product.getName().toLowerCase() === name.toLowerCase() &&
+                product.getBrand().toLowerCase() === brand.toLowerCase()
+        );
+
+        if (duplicateProduct) {
+            throw new ProductAlreadyExistsException(`Já existe um produto cadastrado com o nome "${name}" e marca "${brand}"`);
         }
     }
 }

@@ -34,20 +34,20 @@ export class MarketIdValidationException extends DomainError {
 export class MarketValidationService {
     static validateSearchCriteria(id?: string, name?: string): void {
         if (!id && !name) {
-            throw new MarketValidationException("At least one search parameter (id or name) must be provided");
+            throw new MarketValidationException("Pelo menos um parâmetro de busca (id ou nome) deve ser fornecido");
         }
     }
 
     static validateMarketExists(market: Market | null, searchType: 'id' | 'name'): Market {
         if (!market) {
-            throw new MarketNotFoundException(`Market not found by ${searchType}`);
+            throw new MarketNotFoundException(`Supermercado não encontrado por ${searchType}`);
         }
         return market;
     }
 
     static validateMarketId(id: string): void {
         if (!id) {
-            throw new MarketValidationException("Market ID is required");
+            throw new MarketValidationException("ID do supermercado é obrigatório");
         }
     }
 
@@ -69,13 +69,13 @@ export class MarketValidationService {
 
     static validateMarketIdFormat(id: string): void {
         if (!id || id.trim().length === 0) {
-            throw new MarketIdValidationException("Market ID is required");
+            throw new MarketIdValidationException("ID do supermercado é obrigatório");
         }
 
         const trimmedId = id.trim();
 
         if (!this.isValidUUID(trimmedId)) {
-            throw new MarketIdValidationException("Invalid market ID format");
+            throw new MarketIdValidationException("Formato de ID do supermercado inválido");
         }
     }
 
@@ -85,16 +85,16 @@ export class MarketValidationService {
 
     static validateMarketNameFormat(name: string): void {
         if (!name || typeof name !== "string") {
-            throw new MarketNameValidationException("Market name is required");
+            throw new MarketNameValidationException("Nome do supermercado é obrigatório");
         }
 
         const trimmedName = name.trim();
         if (trimmedName.length < 2) {
-            throw new MarketNameValidationException("Market name must have at least 2 characters");
+            throw new MarketNameValidationException("Nome do supermercado deve ter pelo menos 2 caracteres");
         }
 
         if (trimmedName.length > 100) {
-            throw new MarketNameValidationException("Market name must have at most 100 characters");
+            throw new MarketNameValidationException("Nome do supermercado deve ter no máximo 100 caracteres");
         }
     }
 }

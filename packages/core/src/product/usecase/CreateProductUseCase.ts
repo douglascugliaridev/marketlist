@@ -1,8 +1,9 @@
 import { IProductRepository } from "../provider/IProductRepository";
 import { Product } from "../model/product.entity";
 import { IUUIDProvider } from "../../shared/IUUIDProvider";
-
-
+import { ProductValidationService } from "../service/ProductValidationService";
+import { ProductName } from "../model/value-objects/ProductName";
+import { ProductBrand } from "../model/value-objects/ProductBrand";
 
 interface ProductProps {
     id?: string;
@@ -19,6 +20,14 @@ export class CreateProductUseCase {
     ) { }
 
     async execute(input: ProductProps): Promise<Product> {
+        // Normalizar nome e marca para Title Case para verificação
+        const normalizedName = ProductName.create(input.name).getValue();
+        const normalizedBrand = ProductBrand.create(input.brand).getValue();
+
+        // Verificar se já existe produto com mesmo nome e marca
+        const existingProducts = await this.productRepository.findByName(normalizedName);
+        ProductValidationService.validateUniqueProduct(existingProducts, normalizedName, normalizedBrand);
+
         const product = Product.create({
             id: this.uuidProvider.generate(),
             name: input.name,

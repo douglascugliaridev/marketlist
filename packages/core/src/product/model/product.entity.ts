@@ -1,12 +1,13 @@
 import { UserId } from "../../users/model/value-objects/UserId";
 import { ProductId } from "./value-objects/ProductId";
 import { ProductName } from "./value-objects/ProductName";
+import { ProductBrand } from "./value-objects/ProductBrand";
 
 export class Product {
     private constructor(
         private readonly id: ProductId,
         private readonly name: ProductName,
-        private readonly brand: string,
+        private readonly brand: ProductBrand,
         private readonly listDefault: boolean,
         private readonly userId: UserId
     ) { }
@@ -24,7 +25,7 @@ export class Product {
     }
 
     getBrand(): string {
-        return this.brand;
+        return this.brand.getValue();
     }
 
     isListDefault(): boolean {
@@ -41,7 +42,7 @@ export class Product {
         return new Product(
             ProductId.create(props.id),
             ProductName.create(props.name),
-            props.brand,
+            ProductBrand.create(props.brand),
             props.listDefault,
             UserId.create(props.userId)
         );
@@ -61,7 +62,7 @@ export class Product {
         return new Product(
             this.id,
             this.name,
-            brand,
+            ProductBrand.create(brand),
             this.listDefault,
             this.userId
         );

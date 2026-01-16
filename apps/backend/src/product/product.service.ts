@@ -51,6 +51,11 @@ export class ProductService {
     return Array.isArray(products) ? products : [products];
   }
 
+  async findByBrand(brand: string) {
+    const products = await this.productRepository.findByBrand(brand);
+    return products;
+  }
+
   async update(id: string, updateProductDto: UpdateProductDto) {
     const updateProps = {
       id,

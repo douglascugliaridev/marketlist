@@ -73,14 +73,14 @@ Authorization: Bearer {{token}}
 ###
 
 ### ---------------------- BUSCAR MERCADO POR ID ----------------------
-GET {{baseUrl}}/market/{{marketId}}
+GET {{baseUrl}}/market/eb2b785c-2791-4f93-8218-5f02618db139
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
 ###
 
 ### ---------------------- ATUALIZAR MERCADO ----------------------
-PATCH {{baseUrl}}/market/{{marketId}}
+PATCH {{baseUrl}}/market/eb2b785c-2791-4f93-8218-5f02618db139
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
@@ -91,7 +91,7 @@ Authorization: Bearer {{token}}
 ###
 
 ### ---------------------- EXCLUIR MERCADO ----------------------
-DELETE {{baseUrl}}/market/{{marketId}}
+DELETE {{baseUrl}}/market/eb2b785c-2791-4f93-8218-5f02618db139
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
@@ -106,8 +106,8 @@ Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
 {
-  "name": "Arroz Branco",
-  "brand": "Ligeirinho",
+  "name": "arroz branco",
+  "brand": "ligeirinho",
   "listDefault": true,
   "userId": "{{userId}}"
 }
@@ -119,7 +119,7 @@ Authorization: Bearer {{token}}
 ###
 
 ### ---------------------- BUSCAR PRODUTO POR ID ----------------------
-GET {{baseUrl}}/product/{{productId}}
+GET {{baseUrl}}/product/27862f9b-e01e-4bdb-882c-d5679ff965b1
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
@@ -133,7 +133,7 @@ Authorization: Bearer {{token}}
 ###
 
 ### ---------------------- BUSCAR PRODUTOS POR MARCA ----------------------
-GET {{baseUrl}}/product?brand=Tio João
+GET {{baseUrl}}/product/brand?brand=Tio João
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
@@ -154,7 +154,7 @@ Authorization: Bearer {{token}}
 ###
 
 ### ---------------------- ATUALIZAR PRODUTO ----------------------
-PATCH {{baseUrl}}/product/{{productId}}
+PATCH {{baseUrl}}/product/e254d13e-6a3c-43d0-b9ff-f501f16a6d34
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
@@ -165,7 +165,7 @@ Authorization: Bearer {{token}}
 ###
 
 ### ---------------------- EXCLUIR PRODUTO ----------------------
-DELETE {{baseUrl}}/product/{{productId}}
+DELETE {{baseUrl}}/product/e254d13e-6a3c-43d0-b9ff-f501f16a6d34
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 

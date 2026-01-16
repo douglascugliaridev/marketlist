@@ -84,61 +84,61 @@ export class UserValidationService {
 
     static validateUserIdFormat(id: string): void {
         if (!id || typeof id !== "string" || id.trim().length === 0) {
-            throw new UserIdValidationException("User ID is required");
+            throw new UserIdValidationException("ID do usuário é obrigatório");
         }
 
         const trimmedId = id.trim();
 
         if (!this.isValidUUID(trimmedId)) {
-            throw new UserIdValidationException("Invalid user ID format");
+            throw new UserIdValidationException("Formato de ID do usuário inválido");
         }
     }
 
     static validateUserNameFormat(name: string): void {
         if (!name || name.trim().length === 0) {
-            throw new UserNameValidationException("User name is required");
+            throw new UserNameValidationException("Nome do usuário é obrigatório");
         }
 
         const trimmedName = name.trim();
         if (trimmedName.length < 2) {
-            throw new UserNameValidationException("User name must have at least 2 characters");
+            throw new UserNameValidationException("Nome do usuário deve ter pelo menos 2 caracteres");
         }
 
         if (trimmedName.length > 100) {
-            throw new UserNameValidationException("User name must have at most 100 characters");
+            throw new UserNameValidationException("Nome do usuário deve ter no máximo 100 caracteres");
         }
     }
 
     static validateUserEmailFormat(email: string): void {
         if (!email || typeof email !== "string" || email.trim().length === 0) {
-            throw new UserEmailValidationException("User email is required");
+            throw new UserEmailValidationException("Email do usuário é obrigatório");
         }
 
         const trimmedEmail = email.trim().toLowerCase();
         const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
 
         if (!isValid) {
-            throw new UserEmailValidationException("Invalid user email format");
+            throw new UserEmailValidationException("Formato de email do usuário inválido");
         }
     }
 
     static validateUserPasswordFormat(password: string): void {
         if (!password || password.trim().length === 0) {
-            throw new UserPasswordValidationException("User password is required");
+            throw new UserPasswordValidationException("Senha do usuário é obrigatória");
         }
 
         if (password.length < 6) {
-            throw new UserPasswordValidationException("User password must have at least 6 characters");
+            throw new UserPasswordValidationException("Senha do usuário deve ter pelo menos 6 caracteres");
         }
 
         if (password.length > 100) {
-            throw new UserPasswordValidationException("User password must have at most 100 characters");
+            throw new UserPasswordValidationException("Senha do usuário deve ter no máximo 100 caracteres");
         }
     }
 
     static validateUserPasswordHashFormat(hash: string): void {
         if (!hash || typeof hash !== "string" || hash.trim().length === 0) {
-            throw new UserPasswordHashValidationException("User password hash is required");
+            throw new UserPasswordHashValidationException("Hash da senha do usuário é obrigatório");
         }
     }
 
