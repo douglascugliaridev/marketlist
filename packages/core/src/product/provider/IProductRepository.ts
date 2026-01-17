@@ -6,5 +6,6 @@ export interface IProductRepository {
     findByName(name: string): Promise<Product[]>;
     delete(id: string): Promise<Product | null>;
     findByListDefault(userId: string): Promise<Product[]>;
+    findByUserId(userId: string): Promise<Product[]>;
     findByBrand(brand: string): Promise<Product[]>;
 }

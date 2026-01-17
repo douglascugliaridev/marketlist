@@ -40,7 +40,14 @@ export class PrismaProductRepository implements IProductRepository {
     }
 
     async findByName(name: string): Promise<Product[]> {
-        const products = await this.prisma.product.findMany({ where: { name } })
+        const products = await this.prisma.product.findMany({
+            where: {
+                name: {
+                    contains: name,
+                    mode: 'insensitive'
+                }
+            }
+        })
         if (!products) {
             return []
         }
@@ -93,7 +100,14 @@ export class PrismaProductRepository implements IProductRepository {
     }
 
     async findByBrand(brand: string): Promise<Product[]> {
-        const products = await this.prisma.product.findMany({ where: { brand } })
+        const products = await this.prisma.product.findMany({
+            where: {
+                brand: {
+                    contains: brand,
+                    mode: 'insensitive'
+                }
+            }
+        })
         return products.map(product => Product.create({
             id: product.id,
             name: product.name,

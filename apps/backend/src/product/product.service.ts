@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { CreateProductUseCase, UpdateProductUseCase, FindProductUseCase, FindDefaultProductsUseCase, DeleteProductUseCase } from '@marketlist/core';
+import { CreateProductUseCase, UpdateProductUseCase, FindProductUseCase, FindDefaultProductsUseCase, DeleteProductUseCase, FindProductForBrandUseCase, FindProductByUserIdUseCase, Product } from '@marketlist/core';
 import { UUIDAdapter } from 'src/shared/uuid.adapter';
 import { PrismaProductRepository } from './prisma-product.repository';
 
@@ -13,6 +13,8 @@ export class ProductService {
   private readonly findProductUseCase: FindProductUseCase;
   private readonly findDefaultProductsUseCase: FindDefaultProductsUseCase;
   private readonly deleteProductUseCase: DeleteProductUseCase;
+  private readonly findProductForBrandUseCase: FindProductForBrandUseCase;
+  private readonly findProductByUserIdUseCase: FindProductByUserIdUseCase;
 
   constructor(
     private readonly productRepository: PrismaProductRepository, private readonly uuidProvider: UUIDAdapter
@@ -22,15 +24,21 @@ export class ProductService {
     this.findProductUseCase = new FindProductUseCase(this.productRepository);
     this.findDefaultProductsUseCase = new FindDefaultProductsUseCase(this.productRepository);
     this.deleteProductUseCase = new DeleteProductUseCase(this.productRepository);
+    this.findProductForBrandUseCase = new FindProductForBrandUseCase(this.productRepository);
+    this.findProductByUserIdUseCase = new FindProductByUserIdUseCase(this.productRepository);
   }
 
   async create(createProductDto: CreateProductDto) {
     return await this.createProductUseCase.execute(createProductDto);
   }
 
-  async findById(id: string) {
-    const product = await this.findProductUseCase.execute({ id });
-    return product;
+  async findById(id: string): Promise<Product> {
+    const result = await this.findProductUseCase.execute({ id });
+    // Quando buscar por ID, sempre retorna um único produto
+    if (Array.isArray(result)) {
+      throw new Error('Erro inesperado: busca por ID retornou múltiplos produtos');
+    }
+    return result;
   }
 
   async findByName(name: string) {
@@ -39,7 +47,7 @@ export class ProductService {
   }
 
   async findByUserId(userId: string) {
-    const products = await this.productRepository.findByUserId(userId);
+    const products = await this.findProductByUserIdUseCase.execute(userId);
     return products;
   }
 
@@ -52,8 +60,8 @@ export class ProductService {
   }
 
   async findByBrand(brand: string) {
-    const products = await this.productRepository.findByBrand(brand);
-    return products;
+    const products = await this.findProductForBrandUseCase.execute(brand);
+    return Array.isArray(products) ? products : [products];
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
@@ -63,7 +71,8 @@ export class ProductService {
       brand: updateProductDto.brand,
       price: updateProductDto.price,
     };
-    return await this.updateProductUseCase.execute(updateProps);
+    await this.updateProductUseCase.execute(updateProps);
+    return await this.findProductUseCase.execute({ id });
   }
 
   async remove(id: string) {

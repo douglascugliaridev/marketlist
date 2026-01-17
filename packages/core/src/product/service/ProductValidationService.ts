@@ -50,19 +50,20 @@ export class ProductValidationService {
         }
     }
 
-    static validateProductExists(product: Product | Product[] | null, searchType: 'id' | 'name'): Product {
+    static validateProductExists(product: Product | null, searchType: 'id' | 'name'): Product {
         if (!product) {
             throw new ProductNotFoundException(`Produto não encontrado por ${searchType}`);
         }
 
-        if (Array.isArray(product)) {
-            if (product.length === 0) {
-                throw new ProductNotFoundException(`Produto não encontrado por ${searchType}`);
-            }
-            return product[0]; // Retorna o primeiro produto encontrado por nome
+        return product;
+    }
+
+    static validateProductsExists(products: Product[], searchType: 'id' | 'name'): Product[] {
+        if (!products || products.length === 0) {
+            throw new ProductNotFoundException(`Produto não encontrado por ${searchType}`);
         }
 
-        return product;
+        return products;
     }
 
     static validateProductIdFormat(id: string): void {

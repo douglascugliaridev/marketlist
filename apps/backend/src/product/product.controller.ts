@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, HttpCode } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -21,9 +21,18 @@ export class ProductController {
   }
 
   @Get('search')
-  async findByName(@Query('name') name: string) {
-    const products = await this.productService.findByName(name);
-    return ProductResponseDto.fromProducts(products);
+  async findProduct(@Query('id') id?: string, @Query('name') name?: string) {
+    if (id) {
+      const product = await this.productService.findById(id);
+      return ProductResponseDto.fromProduct(product);
+    }
+
+    if (name) {
+      const products = await this.productService.findByName(name);
+      return ProductResponseDto.fromProducts(products);
+    }
+
+    throw new Error('É necessário fornecer id ou name para busca');
   }
 
   @Get('brand')
@@ -47,10 +56,11 @@ export class ProductController {
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     const product = await this.productService.update(id, updateProductDto);
-    return ProductResponseDto.fromProduct(product);
+    return product ? ProductResponseDto.fromProduct(product) : null;
   }
 
   @Delete(':id')
+  @HttpCode(204)
   async remove(@Param('id') id: string) {
     await this.productService.remove(id);
   }

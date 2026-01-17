@@ -16,7 +16,7 @@ import { LoginUseCase } from "./users/usecase/LoginUseCase";
 // Product imports
 import { Product } from "./product/model/product.entity";
 import { IProductRepository } from "./product/provider/IProductRepository";
-import { CreateProductUseCase, UpdateProductUseCase, DeleteProductUseCase, FindProductUseCase, FindDefaultProductsUseCase } from "./product/usecase/index";
+import { CreateProductUseCase, UpdateProductUseCase, DeleteProductUseCase, FindProductUseCase, FindDefaultProductsUseCase, FindProductForBrandUseCase, FindProductByUserIdUseCase } from "./product/usecase/index";
 
 // Purchase imports
 import { Purchase } from "./purchase/model/purchase.entity";
@@ -40,7 +40,7 @@ export { User, IUserRepository, IUserPasswordRepository, IPasswordHasher };
 
 // Product exports
 export { Product, IProductRepository };
-export { CreateProductUseCase, UpdateProductUseCase, DeleteProductUseCase, FindProductUseCase, FindDefaultProductsUseCase };
+export { CreateProductUseCase, UpdateProductUseCase, DeleteProductUseCase, FindProductUseCase, FindDefaultProductsUseCase, FindProductForBrandUseCase, FindProductByUserIdUseCase };
 
 // Purchase exports
 export { Purchase, IPurchaseRepository };

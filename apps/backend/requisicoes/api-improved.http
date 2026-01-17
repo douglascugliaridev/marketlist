@@ -126,14 +126,14 @@ Authorization: Bearer {{token}}
 ###
 
 ### ---------------------- BUSCAR PRODUTOS POR NOME ----------------------
-GET {{baseUrl}}/product/search?name=Arroz
+GET {{baseUrl}}/product/search?name=arroz
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
 ###
 
 ### ---------------------- BUSCAR PRODUTOS POR MARCA ----------------------
-GET {{baseUrl}}/product/brand?brand=Tio João
+GET {{baseUrl}}/product/brand?brand=ligeirinho
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
@@ -154,18 +154,18 @@ Authorization: Bearer {{token}}
 ###
 
 ### ---------------------- ATUALIZAR PRODUTO ----------------------
-PATCH {{baseUrl}}/product/e254d13e-6a3c-43d0-b9ff-f501f16a6d34
+PATCH {{baseUrl}}/product/9993fc1d-d4a8-4c06-ac25-70bb86ff7484
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
 {
-  "brand": "Camil"
+  "brand": "Tio João"
 }
 
 ###
 
 ### ---------------------- EXCLUIR PRODUTO ----------------------
-DELETE {{baseUrl}}/product/e254d13e-6a3c-43d0-b9ff-f501f16a6d34
+DELETE {{baseUrl}}/product/a740b51a-dec1-4cd4-a9fd-13efc2e96acc
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
