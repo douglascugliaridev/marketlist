@@ -14,10 +14,11 @@ export class PurchaseController {
     return PurchaseResponseDto.fromPurchase(purchase);
   }
 
-  // @Get(':id')
-  // async findById(@Param('id') id: string) {
-  //   return await this.purchaseService.findById(id);
-  // }
+  @Get(':id')
+  async findById(@Param('id') id: string) {
+    const purchase = await this.purchaseService.findById(id);
+    return PurchaseResponseDto.fromPurchase(purchase);
+  }
 
   // @Get(':userId')
   // async findByUserId(@Param('userId') userId: string) {

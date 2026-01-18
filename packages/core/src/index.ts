@@ -21,7 +21,7 @@ import { CreateProductUseCase, UpdateProductUseCase, DeleteProductUseCase, FindP
 // Purchase imports
 import { Purchase } from "./purchase/model/purchase.entity";
 import { IPurchaseRepository } from "./purchase/provider/IPurchaseRepository";
-import { CreatePurchaseUseCase, FindPurchaseUseCase, UpdatePurchaseUseCase, DeletePurchaseUseCase, CalculatePurchaseTotalUseCase } from "./purchase/usecase/index";
+import { CreatePurchaseUseCase, FindPurchaseUseCase, UpdatePurchaseUseCase, DeletePurchaseUseCase, CalculatePurchaseTotalUseCase, FindPurchaseByIdUseCase } from "./purchase/usecase/index";
 import { PurchaseId, PurchaseName } from "./purchase/model/value-objects/index";
 
 // ProductItem imports
@@ -44,7 +44,7 @@ export { CreateProductUseCase, UpdateProductUseCase, DeleteProductUseCase, FindP
 
 // Purchase exports
 export { Purchase, IPurchaseRepository };
-export { CreatePurchaseUseCase, FindPurchaseUseCase, UpdatePurchaseUseCase, DeletePurchaseUseCase, CalculatePurchaseTotalUseCase };
+export { CreatePurchaseUseCase, FindPurchaseUseCase, UpdatePurchaseUseCase, DeletePurchaseUseCase, CalculatePurchaseTotalUseCase, FindPurchaseByIdUseCase };
 export { PurchaseId, PurchaseName };
 
 // ProductItem exports

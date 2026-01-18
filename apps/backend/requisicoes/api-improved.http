@@ -55,7 +55,7 @@ Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
 {
-  "name": "Supermercado Central 2",
+  "name": "Supermercado Sul do Rio",
   "userId": "{{userId}}"
 }
 
@@ -123,6 +123,7 @@ GET {{baseUrl}}/product/27862f9b-e01e-4bdb-882c-d5679ff965b1
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
+
 ###
 
 ### ---------------------- BUSCAR PRODUTOS POR NOME ----------------------
@@ -165,7 +166,7 @@ Authorization: Bearer {{token}}
 ###
 
 ### ---------------------- EXCLUIR PRODUTO ----------------------
-DELETE {{baseUrl}}/product/a740b51a-dec1-4cd4-a9fd-13efc2e96acc
+DELETE {{baseUrl}}/product/ed8cc005-17ff-46d3-8b74-277a07fdfff6
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
@@ -227,6 +228,10 @@ Authorization: Bearer {{token}}
 
 ### ---------------------- ADICIONAR ITEM À COMPRA ----------------------
 # @name createProductItem
+
+@productId = 27862f9b-e01e-4bdb-882c-d5679ff965b1
+@purchaseId = eb2b785c-2791-4f93-8218-5f02618db139
+
 POST {{baseUrl}}/product-item
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}

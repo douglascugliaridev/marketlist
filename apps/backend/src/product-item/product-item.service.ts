@@ -23,36 +23,23 @@ export class ProductItemService {
     this.updateProductItemUseCase = new UpdateProductItemUseCase(this.productItemRepository);
   }
 
-  async create(createProductItemDto: CreateProductItemDto) {
-    return this.createProductItemUseCase.execute(createProductItemDto)
+  async createProductItem(createProductItemDto: CreateProductItemDto) {
+    return this.createProductItemUseCase.execute(createProductItemDto);
   }
 
-  async findByPurchaseAndProduct(purchaseId: string, productId: string) {
-    return this.findProductItemsByPurchaseUseCase.execute({ purchaseId });
-  }
-
-  async findByPurchaseId(purchaseId: string) {
-    return this.findProductItemsByPurchaseUseCase.execute({ purchaseId });
-  }
-
-  async findByProductId(productId: string) {
-    return this.productItemRepository.findByProductId(productId);
-  }
-
-  async findAll() {
+  async findAllProductItems() {
     return this.productItemRepository.findAll();
   }
 
-  async deleteByPurchaseAndProduct(purchaseId: string, productId: string) {
+  async findProductItemsByPurchase(purchaseId: string) {
+    return this.findProductItemsByPurchaseUseCase.execute({ purchaseId });
+  }
+
+  async removeProductItem(productId: string, purchaseId: string) {
     return this.deleteProductItemUseCase.execute(productId, purchaseId);
   }
 
-  async updateByPurchaseAndProduct(purchaseId: string, productId: string, updateProductItemDto: UpdateProductItemDto) {
-    return this.updateProductItemUseCase.execute({
-      productId,
-      purchaseId,
-      price: updateProductItemDto.price,
-      amount: updateProductItemDto.amount
-    });
+  async updateProductItem(updateProductItemDto: UpdateProductItemDto) {
+    return this.updateProductItemUseCase.execute(updateProductItemDto);
   }
 }

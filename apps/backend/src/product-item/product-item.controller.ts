@@ -10,37 +10,32 @@ export class ProductItemController {
 
   @Post()
   async create(@Body() createProductItemDto: CreateProductItemDto) {
-    const productItem = await this.productItemService.create(createProductItemDto);
+    const productItem = await this.productItemService.createProductItem(createProductItemDto);
     return ProductItemResponseDto.fromProductItem(productItem);
   }
 
-  @Get('purchase/:purchaseId')
-  async findByPurchaseId(@Param('purchaseId') purchaseId: string) {
-    const productItems = await this.productItemService.findByPurchaseId(purchaseId);
+  @Get(':purchaseId')
+  async findProductItemsByPurchase(@Param('purchaseId') purchaseId: string) {
+    const productItems = await this.productItemService.findProductItemsByPurchase(purchaseId);
     return ProductItemResponseDto.fromProductItems(productItems);
   }
 
-  @Get('product/:productId')
-  async findByProductId(@Param('productId') productId: string) {
-    const productItem = await this.productItemService.findByProductId(productId);
+  @Get()
+  async findAll() {
+    const productItems = await this.productItemService.findAllProductItems();
+    return ProductItemResponseDto.fromProductItems(productItems);
+  }
+
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() updateProductItemDto: UpdateProductItemDto) {
+    const productItem = await this.productItemService.updateProductItem(id, updateProductItemDto);
     return ProductItemResponseDto.fromProductItem(productItem);
   }
 
-  @Get('purchase/:purchaseId/product/:productId')
-  async findByPurchaseAndProduct(@Param('purchaseId') purchaseId: string, @Param('productId') productId: string) {
-    const productItem = await this.productItemService.findByPurchaseAndProduct(purchaseId, productId);
-    return ProductItemResponseDto.fromProductItem(productItem);
-  }
 
-  @Delete('purchase/:purchaseId/product/:productId')
-  async deleteByPurchaseAndProduct(@Param('purchaseId') purchaseId: string, @Param('productId') productId: string) {
-    await this.productItemService.deleteByPurchaseAndProduct(purchaseId, productId);
-  }
-
-  @Patch('purchase/:purchaseId/product/:productId')
-  async updateByPurchaseAndProduct(@Param('purchaseId') purchaseId: string, @Param('productId') productId: string, @Body() updateProductItemDto: UpdateProductItemDto) {
-    const productItem = await this.productItemService.updateByPurchaseAndProduct(purchaseId, productId, updateProductItemDto);
-    return ProductItemResponseDto.fromProductItem(productItem);
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    await this.productItemService.removeProductItem(id);
   }
 
 }
