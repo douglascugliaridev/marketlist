@@ -4,6 +4,7 @@ export interface IProductItemRepository {
     save(productItem: ProductItem): Promise<void>;
     findByPurchaseAndProduct(purchaseId: string, productId: string): Promise<ProductItem | null>;
     findByPurchaseId(purchaseId: string): Promise<ProductItem[]>;
+    findByPurchaseIdWithProducts(purchaseId: string): Promise<{ productItems: ProductItem[], products: any[] }>;
     findByProductId(productId: string): Promise<ProductItem | null>;
     findAll(): Promise<ProductItem[]>;
     delete(productId: string, purchaseId: string): Promise<ProductItem | null>;

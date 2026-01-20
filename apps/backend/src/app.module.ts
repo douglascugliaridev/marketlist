@@ -8,10 +8,11 @@ import { MarketModule } from './market/market.module';
 import { ProductModule } from './product/product.module';
 import { ProductItemModule } from './product-item/product-item.module';
 import { PurchaseModule } from './purchase/purchase.module';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 @Module({
   imports: [AuthModule, DbModule, MarketModule, ProductModule, ProductItemModule, PurchaseModule],
   controllers: [AppController],
-  providers: [AppService, PrismaUserRepository],
+  providers: [AppService, PrismaUserRepository, JwtAuthGuard],
 })
 export class AppModule { }

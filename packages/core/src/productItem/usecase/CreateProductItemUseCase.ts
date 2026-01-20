@@ -1,8 +1,10 @@
 import { IProductItemRepository } from "../provider/IProductItemRepository";
 import { IProductRepository } from "../../product/provider/IProductRepository";
+import { IPurchaseRepository } from "../../purchase/provider/IPurchaseRepository";
 import { ProductItem } from "../model/product-item.entity";
 import { ProductItemValidationService } from "../service/ProductItemValidationService";
 import { ProductValidationService } from "../../product/service/ProductValidationService";
+import { PurchaseValidationService } from "../../purchase/service/PurchaseValidationService";
 
 interface CreateProductItemProps {
     productId: string;
@@ -16,6 +18,7 @@ export class CreateProductItemUseCase {
     constructor(
         private readonly productItemRepository: IProductItemRepository,
         private readonly productRepository: IProductRepository,
+        private readonly purchaseRepository: IPurchaseRepository,
     ) { }
 
     async execute(props: CreateProductItemProps): Promise<{}> {
@@ -29,6 +32,10 @@ export class CreateProductItemUseCase {
         // Verificar se o produto existe na tabela produto
         const product = await this.productRepository.findById(props.productId);
         ProductValidationService.validateProductExists(product, 'id');
+
+        // Verificar se a compra existe
+        const purchase = await this.purchaseRepository.findById(props.purchaseId);
+        PurchaseValidationService.validatePurchaseExists(purchase);
 
         // Verificar se já existe um item para este produto nesta compra
         const existingItem = await this.productItemRepository.findByPurchaseAndProduct(

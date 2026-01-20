@@ -42,7 +42,9 @@ export class PrismaProductItemRepository implements IProductItemRepository {
         })
     }
     async findByPurchaseId(purchaseId: string): Promise<ProductItem[]> {
-        const productItems = await this.prisma.productItem.findMany({ where: { purchaseId } })
+        const productItems = await this.prisma.productItem.findMany({
+            where: { purchaseId }
+        })
         if (!productItems) {
             return []
         }
@@ -53,6 +55,27 @@ export class PrismaProductItemRepository implements IProductItemRepository {
             previousPrice: productItem.previousPrice || 0,
             amount: Number(productItem.amount)
         }))
+    }
+
+    async findByPurchaseIdWithProducts(purchaseId: string): Promise<{ productItems: ProductItem[], products: any[] }> {
+        const productItems = await this.prisma.productItem.findMany({
+            where: { purchaseId },
+            include: {
+                product: true
+            }
+        })
+        if (!productItems) {
+            return { productItems: [], products: [] }
+        }
+        const items = productItems.map(productItem => ProductItem.create({
+            productId: productItem.productId,
+            purchaseId: productItem.purchaseId,
+            price: productItem.price,
+            previousPrice: productItem.previousPrice || 0,
+            amount: Number(productItem.amount)
+        }))
+        const products = productItems.map(item => item.product)
+        return { productItems: items, products }
     }
     async findByProductId(productId: string): Promise<ProductItem | null> {
         const productItem = await this.prisma.productItem.findFirst({ where: { productId } })

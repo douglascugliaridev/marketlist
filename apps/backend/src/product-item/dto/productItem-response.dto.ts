@@ -4,18 +4,32 @@ export class ProductItemResponseDto {
     price: number;
     previousPrice: number;
     amount: number;
+    product?: {
+        id: string;
+        name: string;
+        brand: string;
+        listDefault: boolean;
+    };
 
-    static fromProductItem(productItem: any): ProductItemResponseDto {
+    static fromProductItem(productItem: any, productData?: any): ProductItemResponseDto {
         return {
             productId: productItem.getProductId(),
             purchaseId: productItem.getPurchaseId(),
-            price: productItem.getPrice(),
-            previousPrice: productItem.getPreviousPrice(),
-            amount: productItem.getAmount()
+            price: productItem.getPrice().getValue(),
+            previousPrice: productItem.getPreviousPrice().getValue(),
+            amount: productItem.getAmount().getValue(),
+            product: productData ? {
+                id: productData.id,
+                name: productData.name,
+                brand: productData.brand,
+                listDefault: productData.listDefault
+            } : undefined
         };
     }
 
-    static fromProductItems(productItems: any[]): ProductItemResponseDto[] {
-        return productItems.map(productItem => this.fromProductItem(productItem));
+    static fromProductItems(productItems: any[], productsData?: any[]): ProductItemResponseDto[] {
+        return productItems.map((productItem, index) =>
+            this.fromProductItem(productItem, productsData?.[index])
+        );
     }
 }

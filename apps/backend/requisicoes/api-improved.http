@@ -229,8 +229,8 @@ Authorization: Bearer {{token}}
 ### ---------------------- ADICIONAR ITEM À COMPRA ----------------------
 # @name createProductItem
 
-@productId = 27862f9b-e01e-4bdb-882c-d5679ff965b1
-@purchaseId = eb2b785c-2791-4f93-8218-5f02618db139
+@productId = 9e934961-54b2-43ee-a51c-8af225aa242c
+@purchaseId = d8e9da83-8f21-49c7-b46b-893170b41a50
 
 POST {{baseUrl}}/product-item
 Content-Type: {{contentType}}
@@ -239,8 +239,9 @@ Authorization: Bearer {{token}}
 {
   "productId": "{{productId}}",
   "purchaseId": "{{purchaseId}}",
-  "price": 25.99,
-  "amount": 2
+  "price": 15.99,
+ // "previousPrice": 20.99,
+  "amount": 3
 }
 
 ###
@@ -250,18 +251,19 @@ Authorization: Bearer {{token}}
 ###
 
 ### ---------------------- LISTAR ITENS DA COMPRA ----------------------
-GET {{baseUrl}}/product-item?purchaseId={{purchaseId}}
+GET {{baseUrl}}/product-item/purchase/d8e9da83-8f21-49c7-b46b-893170b41a50
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
 ###
 
 ### ---------------------- ATUALIZAR ITEM DA COMPRA ----------------------
-PATCH {{baseUrl}}/product-item/{{productItemId}}
+PATCH {{baseUrl}}/product-item/b9548ec6-1bb7-44e4-b1b3-cb04f34cde6f
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
 {
+  "purchaseId": "d8e9da83-8f21-49c7-b46b-893170b41a50",
   "price": 24.99,
   "amount": 3
 }
@@ -269,58 +271,9 @@ Authorization: Bearer {{token}}
 ###
 
 ### ---------------------- EXCLUIR ITEM DA COMPRA ----------------------
-DELETE {{baseUrl}}/product-item/{{productItemId}}
+DELETE {{baseUrl}}/product-item/{{productId}}/{{purchaseId}}
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
 ###
 
-### ====================== TESTES DE VALIDAÇÃO ======================
-
-### ---------------------- LOGIN COM SENHA INCORRETA ----------------------
-POST {{baseUrl}}/auth/login
-Content-Type: {{contentType}}
-
-{
-  "email": "{{userEmail}}",
-  "password": "senha_errada"
-}
-
-###
-
-### ---------------------- ACESSO SEM TOKEN ----------------------
-GET {{baseUrl}}/market
-Content-Type: {{contentType}}
-
-###
-
-### ---------------------- CRIAR MERCADO SEM AUTORIZAÇÃO ----------------------
-POST {{baseUrl}}/market
-Content-Type: {{contentType}}
-
-{
-  "name": "Mercado Não Autorizado",
-  "userId": "{{userId}}"
-}
-
-###
-
-### ====================== FLUXO COMPLETO DE TESTE ======================
-
-### 1. Registrar usuário
-### 2. Fazer login
-### 3. Criar mercado
-### 4. Criar produto
-### 5. Criar compra
-### 6. Adicionar item à compra
-### 7. Listar todos os dados
-### 8. Limpar dados (opcional)
-
-### ====================== INSTRUÇÕES DE USO ======================
-### 
-### 1. Execute as requisições na ordem numerada
-### 2. As variáveis são automaticamente extraídas das respostas
-### 3. Use os testes de validação para verificar segurança
-### 4. Adaptar dados conforme necessário para seus testes
-### 
-### =============================================================================

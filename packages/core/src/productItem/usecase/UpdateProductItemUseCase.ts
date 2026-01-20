@@ -14,9 +14,19 @@ export class UpdateProductItemUseCase {
     ) { }
 
     async execute(props: UpdateProductItemProps): Promise<void> {
+        ProductItemValidationService.validateProductItemPurchaseIdFormat(props.purchaseId);
+
         const existingItem = await this.productItemRepository.findByPurchaseAndProduct(props.purchaseId, props.productId);
 
         ProductItemValidationService.validateProductItemExists(existingItem);
+
+        if (props.price !== undefined) {
+            ProductItemValidationService.validateProductItemPrice(props.price);
+        }
+
+        if (props.amount !== undefined) {
+            ProductItemValidationService.validateProductItemAmount(props.amount);
+        }
 
         await this.productItemRepository.update(props.productId, props.purchaseId, props.price, props.amount);
     }

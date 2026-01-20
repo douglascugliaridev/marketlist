@@ -14,7 +14,7 @@ import { DbModule } from '../db/db.module';
     DbModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'default-secret',
-      signOptions: { expiresIn: '24h' },
+      signOptions: { expiresIn: '10m' },
     }),
   ],
   controllers: [AuthController],
@@ -26,6 +26,6 @@ import { DbModule } from '../db/db.module';
     PasswordHasherAdapter,
     UUIDAdapter,
   ],
-  exports: [AuthService, JwtAuthGuard],
+  exports: [AuthService, JwtAuthGuard, JwtModule],
 })
 export class AuthModule { }

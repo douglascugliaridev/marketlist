@@ -40,6 +40,8 @@ export default function Purchase() {
     ]);
     const [showModal, setShowModal] = useState(false);
     const [newProductName, setNewProductName] = useState("");
+    const [newProductBrand, setNewProductBrand] = useState("");
+    const [addToDefaultList, setAddToDefaultList] = useState(true);
     const [nextId, setNextId] = useState(4);
 
     const checkProductInDefaultList = (productName: string) => {
@@ -50,6 +52,8 @@ export default function Purchase() {
 
     const handleAddProduct = () => {
         setNewProductName("");
+        setNewProductBrand("");
+        setAddToDefaultList(true);
         setShowModal(true);
     };
 
@@ -60,6 +64,7 @@ export default function Purchase() {
         const newItem = {
             id: nextId,
             name: trimmedName,
+            brand: newProductBrand.trim(),
             quantity: 1,
             previousPrice: "R$ 0,00",
             price: "R$ 0,00",
@@ -69,12 +74,14 @@ export default function Purchase() {
         setItems(prev => [...prev, newItem]);
         setNextId(prev => prev + 1);
 
-        if (!checkProductInDefaultList(trimmedName)) {
+        if (addToDefaultList && !checkProductInDefaultList(trimmedName)) {
             setDefaultList(prev => [...prev, { id: nextId, name: trimmedName, quantity: 1 }]);
         }
 
         setShowModal(false);
         setNewProductName("");
+        setNewProductBrand("");
+        setAddToDefaultList(true);
     };
 
     const handleDeleteProduct = (productId: number) => {
@@ -313,16 +320,35 @@ export default function Purchase() {
                             Adicionar Novo Produto
                         </h3>
                         <p className="text-sm text-gray-600 mb-4">
-                            Digite o nome do produto que deseja adicionar. Ele será salvo automaticamente na sua lista padrão caso ainda não exista.
+                            Digite o nome do produto e a marca que deseja adicionar.
                         </p>
                         <input
                             type="text"
                             value={newProductName}
                             onChange={(e) => setNewProductName(e.target.value)}
                             placeholder="Nome do produto"
-                            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-inner focus:outline-none focus:ring-2 focus:ring-[#71C177]/70 focus:border-[#71C177] mb-4"
+                            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-inner focus:outline-none focus:ring-2 focus:ring-[#71C177]/70 focus:border-[#71C177] mb-3"
                             autoFocus
                         />
+                        <input
+                            type="text"
+                            value={newProductBrand}
+                            onChange={(e) => setNewProductBrand(e.target.value)}
+                            placeholder="Marca (opcional)"
+                            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-inner focus:outline-none focus:ring-2 focus:ring-[#71C177]/70 focus:border-[#71C177] mb-4"
+                        />
+                        <div className="flex items-center gap-2 mb-4">
+                            <input
+                                type="checkbox"
+                                id="addToDefaultList"
+                                checked={addToDefaultList}
+                                onChange={(e) => setAddToDefaultList(e.target.checked)}
+                                className="h-4 w-4 rounded border-gray-300 text-[#71C177] focus:ring-[#71C177]/70"
+                            />
+                            <label htmlFor="addToDefaultList" className="text-sm text-gray-700">
+                                Adicionar à lista padrão
+                            </label>
+                        </div>
                         {newProductName.trim() && checkProductInDefaultList(newProductName.trim()) && (
                             <p className="text-xs text-amber-600 mb-4">
                                 ⚠️ Este produto já existe na sua lista padrão e não será duplicado.
@@ -334,6 +360,8 @@ export default function Purchase() {
                                 onClick={() => {
                                     setShowModal(false);
                                     setNewProductName("");
+                                    setNewProductBrand("");
+                                    setAddToDefaultList(true);
                                 }}
                                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition"
                             >

@@ -92,11 +92,53 @@ export class ProductItemValidationService {
         if (amount < 0) {
             throw new ProductItemAmountValidationException("Quantidade não pode ser negativa");
         }
+
+        if (amount === 0) {
+            throw new ProductItemAmountValidationException("Quantidade não pode ser zero");
+        }
+
+        if (!Number.isInteger(amount)) {
+            throw new ProductItemAmountValidationException("Quantidade deve ser um número inteiro");
+        }
+
+        if (amount > 99999) {
+            throw new ProductItemAmountValidationException("Quantidade não pode ser maior que 99.999");
+        }
     }
 
     static validateProductItemPrice(price: number): void {
         if (price < 0) {
             throw new ProductItemPriceValidationException("Preço não pode ser negativo");
+        }
+
+        if (price === 0) {
+            throw new ProductItemPriceValidationException("Preço não pode ser zero");
+        }
+
+        if (price > 999999.99) {
+            throw new ProductItemPriceValidationException("Preço não pode ser maior que R$ 999.999,99");
+        }
+
+        // Validar precisão decimal (máximo 2 casas decimais)
+        const decimalPlaces = (price.toString().split('.')[1] || '').length;
+        if (decimalPlaces > 2) {
+            throw new ProductItemPriceValidationException("Preço não pode ter mais de 2 casas decimais");
+        }
+    }
+
+    static validateProductItemPreviousPrice(previousPrice: number): void {
+        if (previousPrice < 0) {
+            throw new ProductItemPriceValidationException("Preço anterior não pode ser negativo");
+        }
+
+        if (previousPrice > 999999.99) {
+            throw new ProductItemPriceValidationException("Preço anterior não pode ser maior que R$ 999.999,99");
+        }
+
+        // Validar precisão decimal (máximo 2 casas decimais)
+        const decimalPlaces = (previousPrice.toString().split('.')[1] || '').length;
+        if (decimalPlaces > 2) {
+            throw new ProductItemPriceValidationException("Preço anterior não pode ter mais de 2 casas decimais");
         }
     }
 
