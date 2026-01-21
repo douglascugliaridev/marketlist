@@ -3,7 +3,7 @@ import { CookieSession } from "@/utils/CookieSession";
 import { createContext, useEffect, useState, ReactNode } from "react";
 
 interface Usuario {
-    nome: string;
+    name: string;
     email: string;
     token: string;
 }

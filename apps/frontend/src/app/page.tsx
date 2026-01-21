@@ -14,7 +14,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const { login } = useAPI();
-    const { user } = useAuth();
+    const { user, login: authLogin } = useAuth();
     const router = useRouter();
 
     async function handleLogin(event: FormEvent<HTMLFormElement>) {
@@ -28,6 +28,7 @@ export default function LoginPage() {
                 setError(result.message);
             } else {
                 CookieSession.manager(result);
+                authLogin(result);
             }
 
         } catch (err) {

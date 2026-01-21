@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useRouter } from 'next/navigation';
 
 const lists = [
     {
@@ -19,6 +22,12 @@ const lists = [
 ];
 
 export default function DashboardPage() {
+    const router = useRouter();
+
+    const handleNovaLista = () => {
+        router.push('/purchase');
+    };
+
     return (
         <>
             {/* Main area */}
@@ -42,12 +51,18 @@ export default function DashboardPage() {
                         </div>
                     </div>
 
-                    <button className="inline-flex items-center gap-2 rounded-full bg-[#F7AD52] px-4 sm:px-5 py-2 text-sm font-semibold text-slate-900 shadow-md hover:brightness-95 transition">
-                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-black/5">
-                            <span className="text-base leading-none">+</span>
-                        </span>
-                        <span>Nova Lista</span>
-                    </button>
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={handleNovaLista}
+                            className="inline-flex items-center gap-2 rounded-full bg-[#F7AD52] px-4 sm:px-5 py-2 text-sm font-semibold text-slate-900 shadow-md hover:brightness-95 transition"
+                        >
+                            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-black/5">
+                                <span className="text-base leading-none">+</span>
+                            </span>
+                            <span>Nova Lista</span>
+                        </button>
+
+                    </div>
                 </header>
 
                 {/* Conteúdo principal */}

@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import UserInfo from './UserInfo'
 
 export default function MenuLateral() {
     const router = useRouter();
@@ -123,8 +124,8 @@ export default function MenuLateral() {
                     </button>
 
                     <button className={`w-full flex items-center gap-3 rounded-xl px-3 py-3 transition-colors ${activeItem === 'purchase'
-                            ? 'bg-[#71C177] text-slate-900 font-medium shadow-sm'
-                            : 'hover:bg-white/5'
+                        ? 'bg-[#71C177] text-slate-900 font-medium shadow-sm'
+                        : 'hover:bg-white/5'
                         }`} onClick={irParaNovaLista}>
                         <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-white/5">
                             {/* Lista icon */}
@@ -142,6 +143,7 @@ export default function MenuLateral() {
                         <span className="text-sm">Nova Lista de Compras</span>
                     </button>
                 </nav>
+                <UserInfo />
             </aside>
         </>
     )

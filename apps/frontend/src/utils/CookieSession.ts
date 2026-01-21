@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 
 interface Usuario {
-    nome: string;
+    name: string;
     email: string;
     token: string;
 }
