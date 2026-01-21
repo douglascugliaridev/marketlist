@@ -143,7 +143,7 @@ export default function RegisterPage() {
                 <div className="mt-4 text-center text-sm">
                     <span className="text-gray-500">Já tem uma conta? </span>
                     <Link
-                        href="/auth"
+                        href="/"
                         className="text-[#f29b2b] font-medium hover:text-[#d8841f]"
                     >
                         Entrar
