@@ -3,7 +3,9 @@ import { CreateMarketUseCase, DeleteMarketUseCase, FindMarketUseCase, UpdateMark
 import { Market } from "./market/model/market.entity";
 import { IMarketRepository } from "./market/provider/IMarketRepository";
 import { IUUIDProvider } from "./shared/IUUIDProvider";
+// Shared imports
 import { DomainError } from "./shared/DomainError";
+import { IPaginationParams, IPaginatedResult, PaginatedResult } from "./shared/IPagination";
 
 // User imports
 import { User } from "./users/model/user.entity";
@@ -54,3 +56,4 @@ export { Price, Amount };
 
 // Shared exports
 export { DomainError };
+export { IPaginationParams, IPaginatedResult, PaginatedResult };

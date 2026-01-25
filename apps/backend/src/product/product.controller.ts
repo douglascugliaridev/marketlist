@@ -3,6 +3,7 @@ import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductResponseDto } from './dto/product-response.dto';
+import { IPaginationParams } from '@marketlist/core';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('product')
@@ -50,9 +51,23 @@ export class ProductController {
   }
 
   @Get()
-  async findByUserId(@Query('userId') userId: string) {
-    const products = await this.productService.findByUserId(userId);
-    return ProductResponseDto.fromProducts(products);
+  async findByUserId(
+    @Query('userId') userId: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string
+  ) {
+    const pagination: IPaginationParams = {
+      page: page ? parseInt(page, 10) : 1,
+      limit: limit ? parseInt(limit, 10) : 10
+    };
+
+    const result = await this.productService.findByUserId(userId, pagination);
+
+    const productDtos = ProductResponseDto.fromProducts(result.data);
+    return {
+      data: productDtos,
+      pagination: result.pagination
+    };
   }
 
   @Patch(':id')

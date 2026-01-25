@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { CreateProductUseCase, UpdateProductUseCase, FindProductUseCase, FindDefaultProductsUseCase, DeleteProductUseCase, FindProductForBrandUseCase, FindProductByUserIdUseCase, Product } from '@marketlist/core';
+import { CreateProductUseCase, UpdateProductUseCase, FindProductUseCase, FindDefaultProductsUseCase, DeleteProductUseCase, FindProductForBrandUseCase, FindProductByUserIdUseCase, Product, IPaginationParams } from '@marketlist/core';
 import { UUIDAdapter } from 'src/shared/uuid.adapter';
 import { PrismaProductRepository } from './prisma-product.repository';
 
@@ -46,9 +46,8 @@ export class ProductService {
     return Array.isArray(products) ? products : [products];
   }
 
-  async findByUserId(userId: string) {
-    const products = await this.findProductByUserIdUseCase.execute(userId);
-    return products;
+  async findByUserId(userId: string, pagination?: IPaginationParams) {
+    return await this.findProductByUserIdUseCase.execute(userId, pagination);
   }
 
   async findDefault(userId: string) {

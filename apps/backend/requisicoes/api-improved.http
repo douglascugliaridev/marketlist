@@ -106,8 +106,8 @@ Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
 {
-  "name": "arroz branco",
-  "brand": "ligeirinho",
+  "name": "Macarrão",
+  "brand": "Galo",
   "listDefault": true,
   "userId": "{{userId}}"
 }
@@ -119,7 +119,7 @@ Authorization: Bearer {{token}}
 ###
 
 ### ---------------------- BUSCAR PRODUTO POR ID ----------------------
-GET {{baseUrl}}/product/27862f9b-e01e-4bdb-882c-d5679ff965b1
+GET {{baseUrl}}/product/1f9651c1-34ea-4d8d-83cf-a0184b2828ca
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
@@ -147,8 +147,44 @@ Authorization: Bearer {{token}}
 
 ###
 
-### ---------------------- BUSCAR PRODUTOS POR USUÁRIO ----------------------
+### ---------------------- BUSCAR PRODUTOS POR USUÁRIO (SEM PAGINAÇÃO) ----------------------
 GET {{baseUrl}}/product?userId={{userId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### ---------------------- BUSCAR PRODUTOS POR USUÁRIO (COM PAGINAÇÃO) ----------------------
+### Primeira página com 5 itens
+GET {{baseUrl}}/product?userId={{userId}}&page=1&limit=5
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### Segunda página com 5 itens
+GET {{baseUrl}}/product?userId={{userId}}&page=2&limit=5
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### Terceira página com 5 itens (última página)
+GET {{baseUrl}}/product?userId={{userId}}&page=3&limit=5
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### Teste com limit diferente - Primeira página com 3 itens
+GET {{baseUrl}}/product?userId={{userId}}&page=1&limit=3
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+###
+
+### Teste com limit diferente - Segunda página com 3 itens
+GET {{baseUrl}}/product?userId={{userId}}&page=2&limit=3
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 

@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Marketlist",
-  description: "Marketlist é um sistema de gerenciamento de listas de compras",
+  description: "Marketlist é um sistema de gerenciamento de listas de compras"
 };
 
 export default function RootLayout({

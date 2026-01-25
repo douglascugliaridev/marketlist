@@ -1,8 +1,91 @@
 "use client";
-
-import Image from "next/image";
+import { useAPI } from "../../../hooks/useAPI";
+import { useState, useEffect } from "react";
 
 export default function Product() {
+    const [name, setName] = useState("");
+    const [brand, setBrand] = useState("");
+    const [listDefault, setListDefault] = useState(false);
+    const [products, setProducts] = useState<any[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+    const { createProduct, getProducts, deleteProduct } = useAPI();
+
+    useEffect(() => {
+        loadProducts();
+    }, []);
+
+    async function loadProducts(page: number = 1) {
+        try {
+            const response = await getProducts(page, 5);
+            setProducts(response?.data || response || []);
+            setTotalPages(response?.totalPages || 1);
+            setTotalItems(response?.total || 0);
+            setCurrentPage(page);
+        } catch (error) {
+            console.error("Erro ao carregar produtos:", error);
+            setProducts([]);
+            setTotalPages(1);
+            setTotalItems(0);
+        }
+    }
+
+    async function handleCreateProduct() {
+        setError("");
+        setSuccess("");
+
+        if (!name.trim()) {
+            setError("Por favor, informe o nome do produto");
+            return;
+        }
+
+        if (!brand.trim()) {
+            setError("Por favor, informe a marca do produto");
+            return;
+        }
+
+        try {
+            const result = await createProduct(name, brand, listDefault);
+
+            if (result.error) {
+                setError(result.error);
+            } else {
+                setSuccess("Produto cadastrado com sucesso!");
+                setName("");
+                setBrand("");
+                setListDefault(false);
+                loadProducts(1);
+            }
+        } catch (err) {
+            setError("Ocorreu um erro ao cadastrar o produto. Tente novamente.");
+        }
+    }
+
+    function handleCancel() {
+        setName('');
+        setBrand('');
+        setListDefault(false);
+        setError('');
+        setSuccess('');
+    }
+
+    async function handleDeleteProduct(id: string) {
+        try {
+            const result = await deleteProduct(id);
+            if (result.error) {
+                setError(result.error);
+            } else {
+                setSuccess("Produto deletado com sucesso!");
+                loadProducts(1);
+            }
+        } catch (err) {
+            setError("Ocorreu um erro ao deletar o produto. Tente novamente.");
+        }
+    }
+
     return (
         <>
             {/* Área principal */}
@@ -14,6 +97,18 @@ export default function Product() {
                             Cadastro de Produto
                         </h1>
 
+                        {error && (
+                            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+                                {error}
+                            </div>
+                        )}
+
+                        {success && (
+                            <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm">
+                                {success}
+                            </div>
+                        )}
+
                         <form className="space-y-5 text-sm md:text-[15px]">
                             <div className="space-y-1.5">
                                 <label className="block font-medium text-gray-800">
@@ -23,6 +118,8 @@ export default function Product() {
                                     type="text"
                                     placeholder="Ex: Arroz"
                                     className="w-full rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-sm text-gray-900 shadow-inner focus:outline-none focus:ring-2 focus:ring-[#71C177]/70 focus:border-[#71C177] placeholder:text-gray-400"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
                                 />
                             </div>
 
@@ -38,6 +135,8 @@ export default function Product() {
                                         type="text"
                                         placeholder="Ex: Tio João"
                                         className="w-full rounded-lg border border-gray-300 bg-white pl-11 pr-3.5 py-2.5 text-sm text-gray-900 shadow-inner focus:outline-none focus:ring-2 focus:ring-[#71C177]/70 focus:border-[#71C177] placeholder:text-gray-400"
+                                        value={brand}
+                                        onChange={(e) => setBrand(e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -48,6 +147,8 @@ export default function Product() {
                                         id="default-list"
                                         type="checkbox"
                                         className="h-4 w-4 rounded border-gray-300 text-[#71C177] focus:ring-[#71C177]"
+                                        checked={listDefault}
+                                        onChange={(e) => setListDefault(e.target.checked)}
                                     />
                                 </div>
                                 <div className="text-xs md:text-sm">
@@ -65,13 +166,15 @@ export default function Product() {
 
                             <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:justify-end">
                                 <button
-                                    type="submit"
+                                    type="button"
+                                    onClick={handleCreateProduct}
                                     className="inline-flex items-center justify-center rounded-lg bg-[#71C177] px-7 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#63aa69] transition-colors"
                                 >
                                     Salvar
                                 </button>
                                 <button
                                     type="button"
+                                    onClick={handleCancel}
                                     className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-gray-100 px-7 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors"
                                 >
                                     Cancelar
@@ -81,12 +184,12 @@ export default function Product() {
                     </section>
 
                     {/* Card da tabela */}
-                    <section className="flex-1 rounded-2xl bg-white shadow-[0_18px_45px_rgba(15,23,42,0.15)] px-5 py-5 md:px-7 md:py-7 border border-gray-100 flex flex-col">
-                        <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4 md:mb-5">
+                    <section className="flex-1 rounded-2xl bg-white shadow-[0_18px_45px_rgba(15,23,42,0.15)] px-5 py-5 md:px-7 md:py-7 border border-gray-100 flex flex-col max-h-[400px]">
+                        <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4 md:mb-5 flex-shrink-0">
                             Produtos cadastrados
                         </h2>
 
-                        <div className="overflow-x-auto -mx-2 md:mx-0">
+                        <div className="overflow-x-auto -mx-2 md:mx-0 overflow-y-auto flex-1">
                             <table className="min-w-full text-sm text-left text-gray-800">
                                 <thead>
                                     <tr className="bg-[#71C177] text-white text-xs uppercase tracking-wide">
@@ -101,13 +204,9 @@ export default function Product() {
                                     </tr>
                                 </thead>
                                 <tbody className="text-sm">
-                                    {[
-                                        { name: "Arroz Integral", brand: "Tio João", isDefault: true },
-                                        { name: "Leite Desnatado", brand: "Itambé", isDefault: true },
-                                        { name: "Café", brand: "Pilão", isDefault: true },
-                                    ].map((product, index) => (
+                                    {products.map((product, index) => (
                                         <tr
-                                            key={product.name}
+                                            key={product.id || product.name}
                                             className={`${index % 2 === 0 ? "bg-gray-50" : "bg-white"} hover:bg-gray-100 transition-colors`}
                                         >
                                             <td className="px-4 py-3 border-b border-gray-200 text-gray-900">
@@ -117,7 +216,7 @@ export default function Product() {
                                                 {product.brand}
                                             </td>
                                             <td className="px-4 py-3 border-b border-gray-200 text-center">
-                                                {product.isDefault && (
+                                                {product.listDefault && (
                                                     <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#71C177]/10 text-[#71C177] border border-[#71C177]/40">
                                                         <svg
                                                             xmlns="http://www.w3.org/2000/svg"
@@ -157,6 +256,7 @@ export default function Product() {
                                                         type="button"
                                                         className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-gray-600 shadow-sm transition hover:bg-gray-300"
                                                         aria-label="Excluir produto"
+                                                        onClick={() => handleDeleteProduct(product.id)}
                                                     >
                                                         <svg
                                                             viewBox="0 0 24 24"
@@ -182,6 +282,36 @@ export default function Product() {
                                 </tbody>
                             </table>
                         </div>
+
+                        {/* Controles de paginação */}
+                        {totalPages > 1 && (
+                            <div className="flex items-center justify-between px-2 py-3 mt-4 border-t border-gray-200">
+                                <div className="text-sm text-gray-700">
+                                    Mostrando {products.length} de {totalItems} produtos
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => loadProducts(currentPage - 1)}
+                                        disabled={currentPage === 1}
+                                        className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        Anterior
+                                    </button>
+                                    <span className="text-sm text-gray-700">
+                                        Página {currentPage} de {totalPages}
+                                    </span>
+                                    <button
+                                        type="button"
+                                        onClick={() => loadProducts(currentPage + 1)}
+                                        disabled={currentPage === totalPages}
+                                        className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        Próximo
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </section>
                 </div>
             </main>

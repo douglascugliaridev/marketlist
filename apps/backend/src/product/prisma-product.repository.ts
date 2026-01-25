@@ -1,4 +1,4 @@
-import { IProductRepository, Product } from "@marketlist/core";
+import { IProductRepository, Product, IPaginationParams } from "@marketlist/core";
 import { PrismaService } from "../db/prisma.service";
 import { Injectable } from "@nestjs/common";
 
@@ -88,8 +88,15 @@ export class PrismaProductRepository implements IProductRepository {
         }))
     }
 
-    async findByUserId(userId: string): Promise<Product[]> {
-        const products = await this.prisma.product.findMany({ where: { userId } })
+    async findByUserId(userId: string, pagination?: IPaginationParams): Promise<Product[]> {
+        const skip = pagination?.page && pagination?.limit ? (pagination.page - 1) * pagination.limit : undefined;
+        const take = pagination?.limit || undefined;
+
+        const products = await this.prisma.product.findMany({
+            where: { userId },
+            skip,
+            take
+        })
         return products.map(product => Product.create({
             id: product.id,
             name: product.name,
@@ -97,6 +104,12 @@ export class PrismaProductRepository implements IProductRepository {
             brand: product.brand,
             listDefault: product.listDefault
         }))
+    }
+
+    async countByUserId(userId: string): Promise<number> {
+        return await this.prisma.product.count({
+            where: { userId }
+        });
     }
 
     async findByBrand(brand: string): Promise<Product[]> {
